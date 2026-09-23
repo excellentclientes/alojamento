@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lumière Imóveis | A sua Casa de Sonho</title>
+    <title id="page-title">Lumière Imóveis | A sua Casa de Sonho</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -45,7 +45,6 @@
         html { scroll-behavior: smooth; }
         body { font-family: 'Poppins', sans-serif; background-color: #f9fafb; color: #1f2937; overflow-x: hidden; }
         
-        /* Scrollbar customizada */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #0c4a6e; border-radius: 4px; }
@@ -59,22 +58,18 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* Animações CSS para elementos dinâmicos do SPA */
         .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; opacity: 0; transform: translateY(20px); }
         .fade-in { animation: fadeIn 0.4s ease-in-out forwards; opacity: 0; }
         
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { to { opacity: 1; } }
 
         select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
+    <!-- NAVBAR -->
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 bg-transparent">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center">
@@ -91,8 +86,8 @@
                     <a href="#" onclick="resetApp(); return false;" class="nav-link text-white hover:text-brand-500 font-medium transition">Início</a>
                     <a href="#imoveis" onclick="closeDetails()" class="nav-link text-white hover:text-brand-500 font-medium transition">Imóveis</a>
                     <a href="#footer" class="nav-link text-white hover:text-brand-500 font-medium transition">Sobre Nós</a>
-                    <button class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-2 rounded-full font-medium transition shadow-lg shadow-brand-500/30 hover:scale-105">
-                        Contactar
+                    <button id="nav-contact-btn" onclick="openWhatsApp()" class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-2 rounded-full font-medium transition shadow-lg shadow-brand-500/30 hover:scale-105 flex items-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> <span id="nav-btn-text">Contactar</span>
                     </button>
                 </div>
             </div>
@@ -109,14 +104,14 @@
             <!-- Hero Section -->
             <header class="relative h-screen min-h-[650px] flex items-center justify-center">
                 <div class="absolute inset-0 z-0">
-                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" 
+                    <img id="hero-bg-img" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" 
                          alt="Moradia de Luxo" class="w-full h-full object-cover object-center">
                     <div class="absolute inset-0 hero-gradient z-10"></div>
                 </div>
 
                 <div class="relative z-20 text-center px-4 w-full max-w-6xl mx-auto mt-16" data-aos="zoom-in" data-aos-duration="1000">
-                    <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-lg">
-                        Encontre o imóvel perfeito<br><span class="text-brand-500">para o seu estilo de vida.</span>
+                    <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-lg" id="hero-title">
+                        Encontre o imóvel perfeito<br><span class="text-brand-500" id="hero-subtitle">para o seu estilo de vida.</span>
                     </h1>
                     
                     <!-- Barra de Pesquisa e Filtros -->
@@ -183,9 +178,9 @@
                         </button>
                     </div>
 
-                    <!-- Grelha Dinâmica -->
+                    <!-- Grelha Dinâmica com Ajuste Automático de Layout -->
                     <div id="properties-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                        <!-- Imóveis injetados via JS -->
+                        <!-- Imóveis injetados via JS Firebase -->
                     </div>
 
                     <!-- Estado Vazio (Sem resultados) -->
@@ -210,7 +205,7 @@
         </div>
 
         <!-- ========================================== -->
-        <!-- PROPERTY DETAILS VIEW (Oculta por padrão) -->
+        <!-- PROPERTY DETAILS VIEW (Subpágina) -->
         <!-- ========================================== -->
         <div id="details-view" class="hidden pt-28 pb-20 bg-gray-50 min-h-screen">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -228,14 +223,11 @@
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div class="lg:col-span-2">
-                        
                         <div class="rounded-2xl overflow-hidden shadow-lg bg-white relative">
                             <img id="detail-main-img" src="" alt="Imagem do imóvel" class="w-full aspect-[4/3] md:aspect-[16/9] object-cover transition-opacity duration-300">
                         </div>
                         
-                        <div id="detail-thumbnails" class="grid grid-cols-4 gap-2 sm:gap-4 mt-4">
-                            <!-- Injetado via JS -->
-                        </div>
+                        <div id="detail-thumbnails" class="grid grid-cols-4 gap-2 sm:gap-4 mt-4"></div>
 
                         <div class="hidden lg:block mt-8">
                             <div class="flex justify-between items-start">
@@ -275,34 +267,27 @@
 
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-8">
                             <h3 class="text-xl font-bold text-gray-900 mb-4">Descrição</h3>
-                            <div id="detail-description" class="text-gray-600 space-y-4 leading-relaxed text-justify">
-                                <!-- Injetado via JS -->
-                            </div>
+                            <div id="detail-description" class="text-gray-600 space-y-4 leading-relaxed text-justify"></div>
                         </div>
                     </div>
 
                     <div class="lg:col-span-1">
                         <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 sticky top-28">
                             <div class="flex items-center gap-4 border-b border-gray-100 pb-6 mb-6">
-                                <div class="w-16 h-16 bg-brand-100 rounded-full flex items-center justify-center text-brand-600 text-2xl font-bold">
+                                <div class="w-16 h-16 bg-brand-100 rounded-full flex items-center justify-center text-brand-600 text-2xl font-bold" id="agency-initial">
                                     L
                                 </div>
                                 <div>
-                                    <p class="font-bold text-gray-900">Lumière Agency</p>
+                                    <p class="font-bold text-gray-900" id="agency-name">Lumière Agency</p>
                                     <p class="text-sm text-gray-500">Acompanhamento personalizado.</p>
                                 </div>
                             </div>
                             
-                            <h4 class="font-bold text-gray-800 mb-4">Agendar Visita</h4>
-                            <form class="space-y-4" onsubmit="event.preventDefault();">
-                                <input type="text" placeholder="Nome Completo" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
-                                <input type="email" placeholder="Email" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
-                                <input type="tel" placeholder="Telefone" class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all">
-                                <textarea rows="4" placeholder="Estou interessado neste imóvel..." class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all resize-none"></textarea>
-                                <button type="button" class="w-full bg-brand-900 hover:bg-brand-950 text-white py-3.5 rounded-lg font-bold transition-colors flex items-center justify-center gap-2">
-                                    <i class="fa-regular fa-paper-plane"></i> Enviar Mensagem
-                                </button>
-                            </form>
+                            <h4 class="font-bold text-gray-800 mb-4">Falar com Consultor</h4>
+                            <p class="text-sm text-gray-500 mb-6">Entre em contacto direto via WhatsApp para obter mais informações ou agendar uma visita presencial.</p>
+                            <button type="button" onclick="openWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30">
+                                <i class="fa-brands fa-whatsapp text-xl"></i> Contactar via WhatsApp
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -310,266 +295,146 @@
         </div>
     </main>
 
-    <!-- ========================================== -->
-    <!-- FOOTER PROFISSIONAL -->
-    <!-- ========================================== -->
+    <!-- FOOTER -->
     <footer id="footer" class="bg-gray-900 text-white pt-16 pb-8 border-t border-gray-800 relative z-30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-                
-                <!-- Coluna 1: Sobre -->
                 <div>
                     <div class="flex items-center gap-2 mb-6">
                         <div class="w-8 h-8 bg-brand-500 rounded flex items-center justify-center text-white text-sm shadow-lg">
                             <i class="fa-solid fa-building"></i>
                         </div>
-                        <span class="text-2xl font-bold text-white">Lumière</span>
+                        <span class="text-2xl font-bold text-white" id="footer-logo-text">Lumière</span>
                     </div>
                     <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                        Especialistas em propriedades de luxo e investimentos imobiliários. Encontramos a casa dos seus sonhos com um serviço de excelência e discrição em todo o país.
+                        Especialistas em propriedades de luxo e investimentos imobiliários. Encontramos a casa dos seus sonhos com um serviço de excelência.
                     </p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-brand-500 hover:text-white transition-colors"><i class="fa-brands fa-facebook-f"></i></a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-brand-500 hover:text-white transition-colors"><i class="fa-brands fa-instagram"></i></a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-brand-500 hover:text-white transition-colors"><i class="fa-brands fa-linkedin-in"></i></a>
-                    </div>
                 </div>
 
-                <!-- Coluna 2: Links Úteis -->
                 <div>
                     <h3 class="text-lg font-bold mb-6 text-white border-b border-gray-700 pb-2 inline-block">Links Úteis</h3>
                     <ul class="space-y-3 text-sm">
                         <li><a href="#" onclick="resetApp(); return false;" class="text-gray-400 hover:text-brand-500 transition-colors"><i class="fa-solid fa-chevron-right text-xs mr-2 text-brand-500"></i>Página Inicial</a></li>
-                        <li><a href="#imoveis" class="text-gray-400 hover:text-brand-500 transition-colors"><i class="fa-solid fa-chevron-right text-xs mr-2 text-brand-500"></i>Comprar Imóvel</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-brand-500 transition-colors"><i class="fa-solid fa-chevron-right text-xs mr-2 text-brand-500"></i>Arrendar Imóvel</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-brand-500 transition-colors"><i class="fa-solid fa-chevron-right text-xs mr-2 text-brand-500"></i>Vender Imóvel</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-brand-500 transition-colors"><i class="fa-solid fa-chevron-right text-xs mr-2 text-brand-500"></i>Simulador de Crédito</a></li>
+                        <li><a href="#imoveis" class="text-gray-400 hover:text-brand-500 transition-colors"><i class="fa-solid fa-chevron-right text-xs mr-2 text-brand-500"></i>Catálogo de Imóveis</a></li>
                     </ul>
                 </div>
 
-                <!-- Coluna 3: Zonas Populares -->
-                <div>
-                    <h3 class="text-lg font-bold mb-6 text-white border-b border-gray-700 pb-2 inline-block">Zonas de Destaque</h3>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="#" onclick="searchZone('Lisboa'); return false;" class="text-gray-400 hover:text-brand-500 transition-colors"><i class="fa-solid fa-map-pin text-xs mr-2 text-brand-500"></i>Lisboa (Centro)</a></li>
-                        <li><a href="#" onclick="searchZone('Porto'); return false;" class="text-gray-400 hover:text-brand-500 transition-colors"><i class="fa-solid fa-map-pin text-xs mr-2 text-brand-500"></i>Porto e Norte</a></li>
-                        <li><a href="#" onclick="searchZone('Cascais'); return false;" class="text-gray-400 hover:text-brand-500 transition-colors"><i class="fa-solid fa-map-pin text-xs mr-2 text-brand-500"></i>Cascais & Estoril</a></li>
-                        <li><a href="#" onclick="searchZone('Algarve'); return false;" class="text-gray-400 hover:text-brand-500 transition-colors"><i class="fa-solid fa-map-pin text-xs mr-2 text-brand-500"></i>Algarve (Vilamoura)</a></li>
-                        <li><a href="#" onclick="searchZone('Sintra'); return false;" class="text-gray-400 hover:text-brand-500 transition-colors"><i class="fa-solid fa-map-pin text-xs mr-2 text-brand-500"></i>Sintra</a></li>
-                    </ul>
-                </div>
-
-                <!-- Coluna 4: Contactos -->
                 <div>
                     <h3 class="text-lg font-bold mb-6 text-white border-b border-gray-700 pb-2 inline-block">Contactos</h3>
                     <ul class="space-y-4 text-sm">
-                        <li class="flex items-start">
-                            <i class="fa-solid fa-location-dot mt-1 text-brand-500 mr-3"></i>
-                            <span class="text-gray-400">Avenida da Liberdade, 110<br>1250-146 Lisboa, Portugal</span>
-                        </li>
                         <li class="flex items-center">
-                            <i class="fa-solid fa-phone text-brand-500 mr-3"></i>
-                            <span class="text-gray-400">+351 210 123 456 <br><span class="text-xs text-gray-500">(Chamada para a rede fixa nacional)</span></span>
-                        </li>
-                        <li class="flex items-center">
-                            <i class="fa-solid fa-envelope text-brand-500 mr-3"></i>
-                            <a href="mailto:info@lumiere.pt" class="text-gray-400 hover:text-white transition-colors">info@lumiere.pt</a>
+                            <i class="fa-brands fa-whatsapp text-emerald-500 mr-3 text-lg"></i>
+                            <span class="text-gray-400" id="footer-phone">+351 912 345 678</span>
                         </li>
                     </ul>
                 </div>
-
             </div>
             
-            <!-- Direitos Reservados -->
             <div class="border-t border-gray-800 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
-                <p>&copy; 2024 Lumière Imobiliária Premium. Todos os direitos reservados.</p>
-                <div class="flex space-x-4 mt-4 md:mt-0">
-                    <a href="#" class="hover:text-white transition-colors">Termos de Uso</a>
-                    <a href="#" class="hover:text-white transition-colors">Política de Privacidade</a>
-                    <a href="#" class="hover:text-white transition-colors">Cookies</a>
-                </div>
+                <p>&copy; 2026 <span id="footer-copyright-name">Lumière Imobiliária</span>. Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>
 
-    <!-- AOS Animation JS -->
+    <!-- Script de Inicialização AOS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
-    <script>
-        // Formata os preços para Euros (Portugal)
+
+    <!-- SCRIPTS FIREBASE + LÓGICA DO SITE -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, onSnapshot, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Configuração do Firebase fornecida pelo utilizador
+        const firebaseConfig = {
+            apiKey: "AIzaSyCx8OyFbqjgaJ8SUs1xfMuK8Tbeg6MklJY",
+            authDomain: "alojamento-c4f0a.firebaseapp.com",
+            projectId: "alojamento-c4f0a",
+            storageBucket: "alojamento-c4f0a.firebasestorage.app",
+            messagingSenderId: "650640192233",
+            appId: "1:650640192233:web:c09f5d56c13617f1207678"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Formatação em Euros
         const currencyFormatter = new Intl.NumberFormat('pt-PT', {
             style: 'currency',
             currency: 'EUR',
             maximumFractionDigits: 0
         });
 
-        // ==========================================
-        // DADOS (20 Imóveis)
-        // ==========================================
-        const allProperties = [
-            {
-                id: 1, title: "Apartamento T3 de Luxo", price: 850000, location: "Parque das Nações, Lisboa", type: "Apartamento", beds: 3, baths: 3, area: 165, year: 2021,
-                mainImage: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: ["https://images.unsplash.com/photo-1502672260266-1c1e52d377b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"],
-                description: "Fantástico apartamento no Parque das Nações com vista desafogada para o rio Tejo. Possui uma sala ampla, cozinha totalmente equipada e acabamentos de luxo. Inclui garagem para 2 carros."
-            },
-            {
-                id: 2, title: "Moradia Contemporânea com Piscina", price: 1250000, location: "Cascais, Lisboa", type: "Moradia", beds: 4, baths: 5, area: 320, year: 2023,
-                mainImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: ["https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", "https://images.unsplash.com/photo-1600566752355-35792bedcfea?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"],
-                description: "Moradia isolada de arquitetura contemporânea em Cascais. Equipada com tecnologia smart home, piscina infinita e jardim paisagístico."
-            },
-            {
-                id: 3, title: "Quinta Histórica Restaurada", price: 3500000, location: "Parque Natural de Sintra", type: "Quinta", beds: 6, baths: 4, area: 850, year: 1920,
-                mainImage: "https://images.unsplash.com/photo-1588880331179-bc9b93a8cb65?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: ["https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"],
-                description: "Inserida em pleno Parque Natural de Sintra, esta quinta deslumbrante foi totalmente restaurada mantendo a traça original. Rodeada de natureza."
-            },
-            {
-                id: 4, title: "Estúdio Moderno na Baixa", price: 245000, location: "Baixa Chiado, Porto", type: "Estúdio", beds: 1, baths: 1, area: 45, year: 2020,
-                mainImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: ["https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"],
-                description: "Estúdio otimizado, ideal para investimento ou habitação própria na Baixa do Porto. Totalmente mobilado e equipado com extremo bom gosto."
-            },
-            {
-                id: 5, title: "Penthouse com Terraço Privado", price: 2100000, location: "Foz do Douro, Porto", type: "Penthouse", beds: 3, baths: 4, area: 210, year: 2022,
-                mainImage: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: ["https://images.unsplash.com/photo-1502005097973-6a7082348e28?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"],
-                description: "Penthouse exclusiva na Foz, com um terraço que circunda todo o apartamento, oferecendo vistas 360º sobre o mar e o rio."
-            },
-            {
-                id: 6, title: "Moradia T4 no Parque da Cidade", price: 1850000, location: "Parque da Cidade, Porto", type: "Moradia", beds: 4, baths: 5, area: 380, year: 2018,
-                mainImage: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: ["https://images.unsplash.com/photo-1583608205776-bfd35f6d9f83?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"],
-                description: "Excecional moradia localizada nas imediações do Parque da Cidade. Design de interiores assinado, materiais nobres e grande jardim."
-            },
-            {
-                id: 7, title: "Apartamento T2 Renovado", price: 420000, location: "Alvalade, Lisboa", type: "Apartamento", beds: 2, baths: 2, area: 95, year: 1980,
-                mainImage: "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: ["https://images.unsplash.com/photo-1502672260266-1c1e52d377b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"],
-                description: "T2 totalmente remodelado num dos bairros mais carismáticos de Lisboa. Canalização e eletricidade novas, e ar condicionado."
-            },
-            {
-                id: 8, title: "Quinta Vitivinícola", price: 4500000, location: "Douro, Vila Real", type: "Quinta", beds: 8, baths: 6, area: 1500, year: 1850,
-                mainImage: "https://images.unsplash.com/photo-1464146072230-91cabc968266?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: ["https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"],
-                description: "Propriedade produtora de vinho no Alto Douro Vinhateiro. Inclui casa senhorial, adega moderna, lagares de granito e vistas maravilhosas."
-            },
-            {
-                id: 9, title: "Estúdio Perto da Praia", price: 180000, location: "Matosinhos Sul, Porto", type: "Estúdio", beds: 1, baths: 1, area: 50, year: 2023,
-                mainImage: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: [],
-                description: "Construção nova a 2 minutos a pé da praia de Matosinhos. Excelente isolamento acústico e térmico, com varanda e muita luz natural."
-            },
-            {
-                id: 10, title: "Moradia T5 com Campo de Ténis", price: 2750000, location: "Vilamoura, Algarve", type: "Moradia", beds: 5, baths: 6, area: 600, year: 2015,
-                mainImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: ["https://images.unsplash.com/photo-1583608205776-bfd35f6d9f83?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"],
-                description: "Inserida em lote de 3000m2, possui campo de ténis privativo, enorme piscina de água salgada, cinema em casa e proximidade a campos de golfe."
-            },
-            {
-                id: 11, title: "Apartamento T4 Duplex", price: 950000, location: "Parque Europa, Lisboa", type: "Apartamento", beds: 4, baths: 3, area: 220, year: 2010,
-                mainImage: "https://images.unsplash.com/photo-1502672260266-1c1e52d377b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: ["https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"],
-                description: "Duplex espetacular perto do Parque Europa. No piso superior encontra-se um fantástico terraço com churrasqueira."
-            },
-            {
-                id: 12, title: "Moradia Geminada T3", price: 350000, location: "Braga Centro", type: "Moradia", beds: 3, baths: 2, area: 180, year: 2019,
-                mainImage: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: [],
-                description: "Moradia em ótimo estado de conservação, com pequeno jardim nas traseiras e garagem fechada na periferia de Braga."
-            },
-            {
-                id: 13, title: "Penthouse Exclusiva", price: 1500000, location: "Avenidas Novas, Lisboa", type: "Penthouse", beds: 3, baths: 4, area: 190, year: 2024,
-                mainImage: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: [],
-                description: "Num dos bairros mais nobres de Lisboa, penthouse num edifício recém-construído com piscina comum no rooftop."
-            },
-            {
-                id: 14, title: "Estúdio Central", price: 215000, location: "Marquês de Pombal, Lisboa", type: "Estúdio", beds: 1, baths: 1, area: 38, year: 2022,
-                mainImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: [],
-                description: "Localização premium. Espaço otimizado, cozinha kitchenette e ar condicionado. Excelente rendimento para arrendamento."
-            },
-            {
-                id: 15, title: "Quinta Equestre", price: 1100000, location: "Ribatejo, Santarém", type: "Quinta", beds: 4, baths: 3, area: 400, year: 2005,
-                mainImage: "https://images.unsplash.com/photo-1588880331179-bc9b93a8cb65?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: [],
-                description: "Ideal para amantes de cavalos. Possui boxes, picadeiro coberto e casa principal rústica muito confortável."
-            },
-            {
-                id: 16, title: "Apartamento T1 com Vista", price: 280000, location: "Parque das Nações, Lisboa", type: "Apartamento", beds: 1, baths: 1, area: 75, year: 2012,
-                mainImage: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: [],
-                description: "T1 acolhedor com vista direta para os jardins do parque. Prédio com porteiro e garagem."
-            },
-            {
-                id: 17, title: "Moradia Minimalista", price: 890000, location: "Azeitão, Setúbal", type: "Moradia", beds: 4, baths: 3, area: 250, year: 2024,
-                mainImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: [],
-                description: "Linhas retas e puras, abundante luz natural. Zona muito tranquila e segura, próxima à serra da Arrábida."
-            },
-            {
-                id: 18, title: "Apartamento T3 Histórico", price: 550000, location: "Alfama, Lisboa", type: "Apartamento", beds: 3, baths: 2, area: 110, year: 1950,
-                mainImage: "https://images.unsplash.com/photo-1484154218962-a197022b5858?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: [],
-                description: "Com preservação dos azulejos e chão em tábua corrida originais. Muito charme no coração histórico de Lisboa."
-            },
-            {
-                id: 19, title: "Penthouse com Piscina", price: 3200000, location: "Quinta do Lago, Algarve", type: "Penthouse", beds: 4, baths: 5, area: 350, year: 2023,
-                mainImage: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: [],
-                description: "Luxo indescritível, acabamentos em materiais nobres, piscina aquecida no terraço e vista sobre o campo de golfe."
-            },
-            {
-                id: 20, title: "Moradia de Campo (Quinta)", price: 650000, location: "Alentejo Interior", type: "Quinta", beds: 3, baths: 2, area: 180, year: 2010,
-                mainImage: "https://images.unsplash.com/photo-1588880331179-bc9b93a8cb65?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                images: [],
-                description: "Refúgio perfeito para fugir da cidade. Monte alentejano renovado com traça tradicional, lareira de chão e piscina."
-            }
-        ];
+        // Configurações Padrão
+        let siteConfig = {
+            brandName: "Lumière",
+            heroTitle: "Encontre o imóvel perfeito",
+            heroSubtitle: "para o seu estilo de vida.",
+            whatsapp: "351912345678",
+            btnContactText: "Contactar"
+        };
 
-        // ==========================================
-        // ESTADO DA APLICAÇÃO (SPA)
-        // ==========================================
-        let filteredProperties = [...allProperties];
+        // Imóveis do Sistema
+        let allProperties = [];
+        let filteredProperties = [];
         const PAGE_SIZE = 8;
         let visibleCount = PAGE_SIZE;
 
-        // ==========================================
-        // FUNÇÕES PRINCIPAIS E FILTROS
-        // ==========================================
-        const normalizeText = (text) => text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        // --- SINCRONIZAÇÃO EM TEMPO REAL ---
+        
+        // 1. Configurações do Site
+        onSnapshot(doc(db, "settings", "general"), (docSnap) => {
+            if (docSnap.exists()) {
+                siteConfig = { ...siteConfig, ...docSnap.data() };
+                updateSiteUI();
+            } else {
+                // Criar ficheiro padrão no Firebase se ainda não existir
+                setDoc(doc(db, "settings", "general"), siteConfig);
+            }
+        });
 
-        // Faz reset total de tudo como se a página recarregasse
-        function resetApp() {
-            // Fechar detalhes se abertos
+        // 2. Coleção de Imóveis
+        onSnapshot(doc(db, "settings", "catalog"), (docSnap) => {
+            if (docSnap.exists() && docSnap.data().items) {
+                allProperties = docSnap.data().items;
+            } else {
+                // Inserir dados padrão caso esteja vazio
+                allProperties = getDefaultProperties();
+                setDoc(doc(db, "settings", "catalog"), { items: allProperties });
+            }
+            applyFilters();
+        });
+
+        function updateSiteUI() {
+            document.getElementById('logo-text').innerText = siteConfig.brandName || "Lumière";
+            document.getElementById('footer-logo-text').innerText = siteConfig.brandName || "Lumière";
+            document.getElementById('agency-name').innerText = (siteConfig.brandName || "Lumière") + " Agency";
+            document.getElementById('agency-initial').innerText = (siteConfig.brandName || "L")[0];
+            document.getElementById('page-title').innerText = `${siteConfig.brandName || "Lumière"} | Imóveis em Portugal`;
+            document.getElementById('nav-btn-text').innerText = siteConfig.btnContactText || "Contactar";
+            document.getElementById('hero-title').innerHTML = `${siteConfig.heroTitle || 'Encontre o imóvel perfeito'}<br><span class="text-brand-500">${siteConfig.heroSubtitle || 'para o seu estilo de vida.'}</span>`;
+            document.getElementById('footer-phone').innerText = siteConfig.whatsapp ? `+${siteConfig.whatsapp}` : "+351 912 345 678";
+        }
+
+        window.openWhatsApp = function() {
+            const phone = (siteConfig.whatsapp || "351912345678").replace(/\D/g, '');
+            const msg = encodeURIComponent(`Olá! Gostaria de obter mais informações sobre os imóveis no site da ${siteConfig.brandName || 'Lumière'}.`);
+            window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+        };
+
+        const normalizeText = (text) => text ? text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+
+        window.resetApp = function() {
             closeDetails();
-
-            // Limpar inputs de pesquisa
             document.getElementById('searchInput').value = "";
             document.getElementById('typeInput').value = "";
             document.getElementById('priceInput').value = "all";
-
-            // Resetar array e paginação
             filteredProperties = [...allProperties];
             visibleCount = PAGE_SIZE;
-            
-            // Fazer scroll suave para o topo
             window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            // Renderizar Novamente
             renderProperties();
-        }
+        };
 
-        function searchZone(zone) {
-            resetApp();
-            document.getElementById('searchInput').value = zone;
-            applyFilters();
-            scrollToGrid();
-        }
-
-        // Aplica os filtros e reseta paginação para 8
         function applyFilters() {
             const searchRaw = document.getElementById('searchInput').value;
             const searchTerms = normalizeText(searchRaw).split(' ').filter(t => t.length > 0);
@@ -593,35 +458,19 @@
                 return matchesText && matchesType && matchesPrice;
             });
 
-            // Resetar paginação sempre que pesquisa/filtra
             visibleCount = PAGE_SIZE;
             renderProperties();
         }
 
-        // Paginação
-        function loadMore() {
-            visibleCount += PAGE_SIZE;
-            renderProperties();
-        }
+        window.loadMore = function() { visibleCount += PAGE_SIZE; renderProperties(); };
+        window.showLess = function() { visibleCount = PAGE_SIZE; renderProperties(); scrollToGrid(); };
+        window.scrollToGrid = function() { document.getElementById('imoveis').scrollIntoView({ behavior: 'smooth' }); };
 
-        function showLess() {
-            visibleCount = PAGE_SIZE;
-            renderProperties();
-            scrollToGrid();
-        }
-
-        function scrollToGrid() {
-            document.getElementById('imoveis').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Listeners
         document.getElementById('searchInput').addEventListener('input', applyFilters);
         document.getElementById('typeInput').addEventListener('change', applyFilters);
         document.getElementById('priceInput').addEventListener('change', applyFilters);
 
-        // ==========================================
-        // RENDERIZAÇÃO DOM
-        // ==========================================
+        // --- RENDERIZAÇÃO DA GRELHA ---
         function renderProperties() {
             const grid = document.getElementById('properties-grid');
             const emptyState = document.getElementById('empty-state');
@@ -634,7 +483,6 @@
             const showingCount = Math.min(visibleCount, filteredProperties.length);
             resultsCount.innerText = `A mostrar ${showingCount} de ${filteredProperties.length} imóveis`;
 
-            // Trata Empty State
             if (filteredProperties.length === 0) {
                 grid.classList.add('hidden');
                 emptyState.classList.remove('hidden');
@@ -646,14 +494,21 @@
                 emptyState.classList.add('hidden');
             }
 
-            // Seleciona os visíveis
+            // --- REGLA DE AJUSTE INTELIGENTE DE LAYOUT ---
+            if (filteredProperties.length === 1) {
+                grid.className = "grid grid-cols-1 max-w-md mx-auto gap-8";
+            } else if (filteredProperties.length === 2) {
+                grid.className = "grid grid-cols-1 md:grid-cols-2 max-w-3xl mx-auto gap-8";
+            } else {
+                grid.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8";
+            }
+
             const visibleProperties = filteredProperties.slice(0, visibleCount);
 
             visibleProperties.forEach((prop, index) => {
                 const typeIcon = prop.type === 'Moradia' || prop.type === 'Quinta' ? 'fa-house-chimney' : 'fa-building';
                 
                 const card = document.createElement('div');
-                // Usando CSS animation "fade-in-up" em vez de AOS para itens dinâmicos do SPA
                 card.className = "group cursor-pointer bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 fade-in-up";
                 card.style.animationDelay = `${(index % PAGE_SIZE) * 50}ms`;
                 card.onclick = () => openDetails(prop.id);
@@ -682,7 +537,6 @@
                 grid.appendChild(card);
             });
 
-            // Lógica dos Botões de Paginação
             if (filteredProperties.length > visibleCount) {
                 btnLoadMore.classList.remove('hidden');
             } else {
@@ -696,17 +550,14 @@
             }
         }
 
-        // ==========================================
-        // NAVEGAÇÃO SPA (Subpágina Detalhes)
-        // ==========================================
+        // --- SUBPÁGINA DE DETALHES ---
         const homeView = document.getElementById('home-view');
         const detailsView = document.getElementById('details-view');
 
-        function openDetails(id) {
+        window.openDetails = function(id) {
             const prop = allProperties.find(p => p.id === id);
             if (!prop) return;
 
-            // Popular Dados
             document.getElementById('detail-title').innerText = prop.title;
             document.getElementById('detail-title-mobile').innerText = prop.title;
             document.getElementById('detail-price').innerText = currencyFormatter.format(prop.price);
@@ -726,16 +577,15 @@
             document.getElementById('spec-beds').innerHTML = `<i class="fa-solid fa-bed text-brand-500"></i> ${prop.beds}`;
             document.getElementById('spec-baths').innerHTML = `<i class="fa-solid fa-bath text-brand-500"></i> ${prop.baths}`;
             document.getElementById('spec-area').innerHTML = `<i class="fa-solid fa-ruler-combined text-brand-500"></i> ${prop.area} m²`;
-            document.getElementById('spec-year').innerHTML = `<i class="fa-solid fa-calendar-alt text-brand-500"></i> ${prop.year}`;
+            document.getElementById('spec-year').innerHTML = `<i class="fa-solid fa-calendar-alt text-brand-500"></i> ${prop.year || '2023'}`;
 
             document.getElementById('detail-description').innerText = prop.description;
 
-            // Galeria
             const mainImg = document.getElementById('detail-main-img');
             mainImg.src = prop.mainImage;
             const thumbsContainer = document.getElementById('detail-thumbnails');
             thumbsContainer.innerHTML = '';
-            const allImages = [prop.mainImage, ...prop.images];
+            const allImages = [prop.mainImage, ...(prop.images || [])];
             allImages.forEach((imgUrl) => {
                 const thumb = document.createElement('div');
                 thumb.className = "cursor-pointer rounded-lg overflow-hidden border-2 border-transparent hover:border-brand-500 transition-colors h-20 sm:h-28";
@@ -747,32 +597,22 @@
                 thumbsContainer.appendChild(thumb);
             });
 
-            // Alternar Views
             homeView.classList.add('hidden');
             detailsView.classList.remove('hidden');
             detailsView.classList.add('fade-in');
             window.scrollTo({ top: 0, behavior: 'instant' });
-            
-            // Adjust Navbar para fundo branco imediatamente
             updateNavbarStyle(true);
-        }
+        };
 
-        function closeDetails() {
+        window.closeDetails = function() {
             if (!detailsView.classList.contains('hidden')) {
                 detailsView.classList.add('hidden');
                 homeView.classList.remove('hidden');
-                
-                // Retorna Navbar ao estado do scroll
                 updateNavbarStyle(false);
-                
-                // Volta ao bloco de imóveis
                 setTimeout(() => { document.getElementById('imoveis').scrollIntoView({ behavior: 'instant' }); }, 10);
             }
-        }
+        };
 
-        // ==========================================
-        // EFEITOS DE SCROLL (Navbar)
-        // ==========================================
         function updateNavbarStyle(forceWhite = false) {
             const nav = document.getElementById('navbar');
             const logo = document.getElementById('logo-text');
@@ -790,19 +630,30 @@
         }
 
         window.addEventListener('scroll', () => {
-            if (!detailsView.classList.contains('hidden')) return; // Na subpágina mantém branco
+            if (!detailsView.classList.contains('hidden')) return;
             updateNavbarStyle();
         });
 
-        // INICIALIZAÇÃO
         document.addEventListener('DOMContentLoaded', () => {
-            // Inicia biblioteca de animações de Scroll
             AOS.init({ once: true, offset: 100 });
-            
-            // Renderiza inicial
-            renderProperties();
         });
 
+        function getDefaultProperties() {
+            return [
+                {
+                    id: 1, title: "Apartamento T3 de Luxo", price: 850000, location: "Parque das Nações, Lisboa", type: "Apartamento", beds: 3, baths: 3, area: 165, year: 2021,
+                    mainImage: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+                    images: ["https://images.unsplash.com/photo-1502672260266-1c1e52d377b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"],
+                    description: "Fantástico apartamento no Parque das Nações com vista desafogada para o rio Tejo."
+                },
+                {
+                    id: 2, title: "Moradia Contemporânea com Piscina", price: 1250000, location: "Cascais, Lisboa", type: "Moradia", beds: 4, baths: 5, area: 320, year: 2023,
+                    mainImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+                    images: ["https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"],
+                    description: "Moradia isolada de arquitetura contemporânea em Cascais. Equipada com piscina infinita."
+                }
+            ];
+        }
     </script>
 </body>
 </html>
