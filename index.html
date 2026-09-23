@@ -14,7 +14,7 @@
         tailwind.config = { theme: { extend: { fontFamily: { sans: ['Poppins', 'sans-serif'], }, colors: { brand: { 50: '#f0f9ff', 500: '#0ea5e9', 600: '#0284c7', 900: '#0c4a6e', 950: '#082f49' } } } } }
     </script>
 
-    <style>
+    <style id="dynamic-theme-styles">
         html { scroll-behavior: smooth; }
         body { font-family: 'Poppins', sans-serif; background-color: #1e293b; color: #1f2937; overflow-x: hidden; margin: 0; }
         ::-webkit-scrollbar { width: 8px; }
@@ -47,21 +47,23 @@
 
     <!-- TELA DE LOADING MODERNA -->
     <div id="loader-screen" class="fixed inset-0 z-[999] bg-slate-900 flex flex-col items-center justify-center transition-all duration-700">
-        <div class="relative flex flex-col items-center">
-            <!-- Anel SVG Moderno -->
-            <svg class="w-32 h-32" viewBox="0 0 120 120">
-                <!-- Circulo de Fundo -->
-                <circle class="text-slate-800 stroke-current" stroke-width="8" cx="60" cy="60" r="50" fill="transparent"></circle>
-                <!-- Circulo de Progresso -->
-                <circle id="progress-circle" class="text-brand-500 stroke-current progress-ring__circle" stroke-width="8" stroke-linecap="round" cx="60" cy="60" r="50" fill="transparent" stroke-dasharray="314" stroke-dashoffset="314"></circle>
-            </svg>
-            
-            <!-- Porcentagem no centro -->
-            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[60%] flex flex-col items-center">
-                <span id="progress-text" class="text-2xl font-bold text-white">0%</span>
+        <div class="relative flex flex-col items-center justify-center">
+            <!-- Anel SVG Moderno com porcentagem centralizada -->
+            <div class="relative w-32 h-32 flex items-center justify-center">
+                <svg class="w-32 h-32" viewBox="0 0 120 120">
+                    <!-- Circulo de Fundo -->
+                    <circle class="text-slate-800 stroke-current" stroke-width="8" cx="60" cy="60" r="50" fill="transparent"></circle>
+                    <!-- Circulo de Progresso -->
+                    <circle id="progress-circle" class="text-brand-500 stroke-current progress-ring__circle" stroke-width="8" stroke-linecap="round" cx="60" cy="60" r="50" fill="transparent" stroke-dasharray="314" stroke-dashoffset="314"></circle>
+                </svg>
+                
+                <!-- Porcentagem Perfeitamente Centralizada -->
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <span id="progress-text" class="text-2xl font-bold text-white leading-none">0%</span>
+                </div>
             </div>
             
-            <p id="loader-message" class="text-slate-400 mt-6 font-medium animate-pulse">A conectar com o servidor...</p>
+            <p id="loader-message" class="text-slate-400 mt-6 font-medium animate-pulse text-center">Carregando informações, aguarde</p>
         </div>
     </div>
 
@@ -71,14 +73,14 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
                 <div class="flex items-center gap-2 cursor-pointer group" onclick="resetApp()">
                     <div id="nav-logo-container" class="flex items-center gap-2">
-                        <div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center text-white text-xl shadow-lg"><i class="fa-solid fa-building"></i></div>
-                        <span id="logo-text" class="text-2xl font-bold text-white transition-colors duration-300">A Carregar...</span>
+                        <div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center text-white text-xl shadow-lg shrink-0"><i class="fa-solid fa-building"></i></div>
+                        <span id="logo-text" class="text-xl sm:text-2xl font-bold text-white transition-colors duration-300 logo-text-nav truncate max-w-[200px] sm:max-w-none">A Carregar...</span>
                     </div>
                 </div>
-                <div class="hidden md:flex space-x-8 items-center">
-                    <a href="#" onclick="resetApp(); return false;" class="nav-link text-white font-medium hover:text-brand-400 transition">Início</a>
-                    <button onclick="openWhatsApp()" class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-2 rounded-full font-medium transition shadow-lg flex items-center gap-2">
-                        <i class="fa-brands fa-whatsapp text-lg"></i> Contactar
+                <div class="flex space-x-3 sm:space-x-8 items-center">
+                    <a href="javascript:void(0)" onclick="resetApp(); return false;" class="nav-link text-white font-medium hover:text-brand-400 transition text-sm sm:text-base">Início</a>
+                    <button onclick="openWhatsApp()" class="bg-brand-500 hover:bg-brand-600 text-white px-4 sm:px-6 py-2 rounded-full font-medium transition shadow-lg flex items-center gap-2 text-xs sm:text-sm">
+                        <i class="fa-brands fa-whatsapp text-base sm:text-lg"></i> <span class="hidden xs:inline">Contactar</span>
                     </button>
                 </div>
             </div>
@@ -94,7 +96,7 @@
                     </div>
 
                     <div class="relative z-20 text-center px-4 w-full max-w-6xl mx-auto mt-16" data-aos="zoom-in">
-                        <h1 class="text-4xl md:text-6xl md:leading-tight font-bold text-white mb-6 drop-shadow-lg" id="hero-title">
+                        <h1 class="text-3xl sm:text-4xl md:text-6xl md:leading-tight font-bold text-white mb-6 drop-shadow-lg" id="hero-title">
                             <span id="hero-t1">Encontre o imóvel</span><br><span class="text-brand-500" id="hero-t2">dos seus sonhos.</span>
                         </h1>
                         
@@ -121,21 +123,21 @@
                     </div>
                 </header>
 
-                <section id="imoveis" class="py-24 min-h-screen relative z-20 bg-gray-50">
+                <section id="imoveis" class="py-16 sm:py-24 min-h-screen relative z-20 bg-gray-50">
                     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div class="flex justify-between items-end mb-10 border-b pb-4">
-                            <h2 class="text-3xl font-bold text-gray-900">Catálogo de Imóveis</h2>
-                            <button onclick="resetApp()" class="text-sm text-brand-600 font-medium hover:underline"><i class="fa-solid fa-rotate-right"></i> Limpar Filtros</button>
+                            <h2 class="text-2xl sm:text-3xl font-bold text-gray-900">Catálogo de Imóveis</h2>
+                            <button onclick="resetApp()" class="text-xs sm:text-sm text-brand-600 font-medium hover:underline"><i class="fa-solid fa-rotate-right"></i> Limpar Filtros</button>
                         </div>
-                        <div id="properties-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
+                        <div id="properties-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8"></div>
                     </div>
                 </section>
             </div>
 
             <!-- SUB-PÁGINA DO IMÓVEL -->
-            <div id="details-view" class="hidden pt-28 pb-20 bg-gray-50 min-h-screen">
+            <div id="details-view" class="hidden pt-24 sm:pt-28 pb-20 bg-gray-50 min-h-screen">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <button onclick="closeDetails()" class="flex items-center text-gray-600 hover:text-brand-600 bg-white px-5 py-2.5 rounded-full shadow-sm border border-gray-200 w-fit mb-8 transition">
+                    <button onclick="closeDetails()" class="flex items-center text-gray-600 hover:text-brand-600 bg-white px-5 py-2.5 rounded-full shadow-sm border border-gray-200 w-fit mb-8 transition text-sm">
                         <i class="fa-solid fa-arrow-left mr-2"></i> Voltar
                     </button>
 
@@ -148,10 +150,10 @@
 
                             <div class="mt-8 flex justify-between items-start flex-wrap gap-4">
                                 <div>
-                                    <h1 id="detail-title" class="text-3xl font-bold text-gray-900 mb-2">Título do Imóvel</h1>
-                                    <p id="detail-location" class="text-gray-500 text-lg"><i class="fa-solid fa-location-dot text-brand-500 mr-2"></i>Local</p>
+                                    <h1 id="detail-title" class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Título do Imóvel</h1>
+                                    <p id="detail-location" class="text-gray-500 text-base sm:text-lg"><i class="fa-solid fa-location-dot text-brand-500 mr-2"></i>Local</p>
                                 </div>
-                                <p id="detail-price" class="text-4xl font-bold text-brand-900">0 €</p>
+                                <p id="detail-price" class="text-3xl sm:text-4xl font-bold text-brand-900">0 €</p>
                             </div>
 
                             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-8 grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -182,9 +184,9 @@
         </main>
 
         <!-- RODAPÉ PREMIUM COMPLETO -->
-        <footer id="footer" class="bg-slate-900 text-white pt-20 pb-10 border-t-4 border-brand-500 relative z-30">
+        <footer id="footer" class="bg-slate-900 text-white pt-16 sm:pt-20 pb-10 border-t-4 border-brand-500 relative z-30">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 mb-12">
                     
                     <!-- Coluna 1: Sobre -->
                     <div>
@@ -192,20 +194,16 @@
                         <p id="footer-desc" class="text-slate-400 text-sm leading-relaxed mb-6">
                             Ajudamos a encontrar o espaço perfeito para escrever o próximo capítulo da sua vida. Transparência, confiança e dedicação em cada negócio.
                         </p>
-                        <div class="flex space-x-4">
-                            <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-brand-500 hover:text-white transition"><i class="fa-brands fa-facebook-f"></i></a>
-                            <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-brand-500 hover:text-white transition"><i class="fa-brands fa-instagram"></i></a>
-                            <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-brand-500 hover:text-white transition"><i class="fa-brands fa-linkedin-in"></i></a>
-                        </div>
+                        <div id="footer-socials" class="flex space-x-4"></div>
                     </div>
 
                     <!-- Coluna 2: Links Úteis -->
                     <div>
                         <h3 class="text-lg font-bold mb-6 text-white border-b border-slate-700 pb-2 inline-block">Links Úteis</h3>
                         <ul class="space-y-3">
-                            <li><a href="#" onclick="resetApp(); return false;" class="text-slate-400 hover:text-brand-400 transition text-sm flex items-center"><i class="fa-solid fa-chevron-right text-xs mr-2 text-brand-500"></i> Início</a></li>
-                            <li><a href="#" onclick="scrollToGrid(); return false;" class="text-slate-400 hover:text-brand-400 transition text-sm flex items-center"><i class="fa-solid fa-chevron-right text-xs mr-2 text-brand-500"></i> Ver Imóveis</a></li>
-                            <li><a href="#" onclick="openWhatsApp()" class="text-slate-400 hover:text-brand-400 transition text-sm flex items-center"><i class="fa-solid fa-chevron-right text-xs mr-2 text-brand-500"></i> Fale Connosco</a></li>
+                            <li><a href="javascript:void(0)" onclick="resetApp(); return false;" class="text-slate-400 hover:text-brand-400 transition text-sm flex items-center"><i class="fa-solid fa-chevron-right text-xs mr-2 text-brand-500"></i> Início</a></li>
+                            <li><a href="javascript:void(0)" onclick="scrollToGrid(); return false;" class="text-slate-400 hover:text-brand-400 transition text-sm flex items-center"><i class="fa-solid fa-chevron-right text-xs mr-2 text-brand-500"></i> Ver Imóveis</a></li>
+                            <li><a href="javascript:void(0)" onclick="openWhatsApp()" class="text-slate-400 hover:text-brand-400 transition text-sm flex items-center"><i class="fa-solid fa-chevron-right text-xs mr-2 text-brand-500"></i> Fale Connosco</a></li>
                         </ul>
                     </div>
 
@@ -213,9 +211,9 @@
                     <div>
                         <h3 class="text-lg font-bold mb-6 text-white border-b border-slate-700 pb-2 inline-block">Atendimento</h3>
                         <ul class="space-y-3 text-sm text-slate-400">
-                            <li class="flex justify-between border-b border-slate-800 pb-1"><span>Seg - Sex:</span> <span class="text-white">09:00 - 18:00</span></li>
-                            <li class="flex justify-between border-b border-slate-800 pb-1"><span>Sábados:</span> <span class="text-white">10:00 - 14:00</span></li>
-                            <li class="flex justify-between pb-1"><span>Domingos:</span> <span class="text-brand-400">Fechado</span></li>
+                            <li class="flex justify-between border-b border-slate-800 pb-1"><span>Seg - Sex:</span> <span id="hours-week" class="text-white">09:00 - 18:00</span></li>
+                            <li class="flex justify-between border-b border-slate-800 pb-1"><span>Sábados:</span> <span id="hours-sat" class="text-white">10:00 - 14:00</span></li>
+                            <li class="flex justify-between pb-1"><span>Domingos:</span> <span id="hours-sun" class="text-brand-400">Fechado</span></li>
                         </ul>
                     </div>
 
@@ -235,9 +233,11 @@
                     </div>
                 </div>
                 
-                <div class="border-t border-slate-800 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center">
+                <div class="border-t border-slate-800 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center gap-2">
                     <p class="text-slate-500 text-sm">© 2024 <span id="footer-copy-name">Imobiliária</span>. Todos os direitos reservados.</p>
-                    <p class="text-slate-600 text-xs mt-2 md:mt-0">Criado com foco em resultados.</p>
+                    <p class="text-slate-600 text-xs">
+                        <a href="https://wa.me/5511934664498" target="_blank" class="hover:underline hover:text-sky-400 transition">Developed by Marcos Valério</a>
+                    </p>
                 </div>
             </div>
         </footer>
@@ -248,13 +248,22 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, onSnapshot, collection, initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // FIX FIXO DE URL SEM #
+        function cleanUrlHash() {
+            if (window.location.hash) {
+                history.replaceState("", document.title, window.location.pathname + window.location.search);
+            }
+        }
+        window.addEventListener('hashchange', cleanUrlHash);
+        window.addEventListener('load', cleanUrlHash);
+
         const app = initializeApp({
             apiKey: "AIzaSyCx8OyFbqjgaJ8SUs1xfMuK8Tbeg6MklJY",
             authDomain: "alojamento-c4f0a.firebaseapp.com",
             projectId: "alojamento-c4f0a"
         });
 
-        // INICIAR FIREBASE COM CACHE OFFLINE (Salva no Navegador)
+        // INICIAR FIREBASE COM CACHE OFFLINE
         const db = initializeFirestore(app, {
             localCache: persistentLocalCache({tabManager: persistentMultipleTabManager()})
         });
@@ -263,31 +272,29 @@
         let allProperties = [];
         let filteredProperties = [];
 
-        // LÓGICA DE CARREGAMENTO INTELIGENTE
+        // LÓGICA DE CARREGAMENTO
         let loadProgress = 0;
         let isInitialLoadDone = false;
         let dbLoaded = false;
         
-        function updateProgress(value, message) {
+        function updateProgress(value) {
             if(isInitialLoadDone) return;
             loadProgress = Math.max(loadProgress, value);
             document.getElementById('progress-text').innerText = `${loadProgress}%`;
-            document.getElementById('loader-message').innerText = message;
+            document.getElementById('loader-message').innerText = "Carregando informações, aguarde";
             
-            // Calculo da circunferência do SVG (2 * PI * r) = 314
             const offset = 314 - (loadProgress / 100) * 314;
             document.getElementById('progress-circle').style.strokeDashoffset = offset;
         }
 
-        // Simula progresso até 40% enquanto a página constrói
         let progressInterval = setInterval(() => {
-            if (loadProgress < 40) updateProgress(loadProgress + 5, "A verificar cache do navegador...");
+            if (loadProgress < 40) updateProgress(loadProgress + 5);
         }, 100);
 
         function finalizeLoading() {
             if(isInitialLoadDone) return;
             clearInterval(progressInterval);
-            updateProgress(100, "Tudo pronto!");
+            updateProgress(100);
             
             setTimeout(() => {
                 isInitialLoadDone = true;
@@ -315,13 +322,46 @@
                 document.getElementById('footer-email').innerText = siteConfig.email || "contacto@imobiliaria.pt";
                 document.getElementById('footer-copy-name').innerText = siteConfig.brandName;
 
+                // Aplicar Cores Dinâmicas
+                const colorBlue = siteConfig.colorBlue || "#0284c7";
+                const colorWhite = siteConfig.colorWhite || "#ffffff";
+                const colorFooter = siteConfig.colorFooter || "#0f172a";
+                
+                let dynamicStyles = document.getElementById('dynamic-theme-styles');
+                dynamicStyles.innerHTML += `
+                    .text-brand-500, .text-brand-600, .text-brand-900, .text-brand-400 { color: ${colorBlue} !important; }
+                    .bg-brand-500, .bg-brand-600, .bg-brand-900 { background-color: ${colorBlue} !important; }
+                    .custom-text-white { color: ${colorWhite} !important; }
+                    #footer { background-color: ${colorFooter} !important; }
+                `;
+
+                // Horários de Atendimento
+                if (siteConfig.hoursWeek) document.getElementById('hours-week').innerText = siteConfig.hoursWeek;
+                if (siteConfig.hoursSat) document.getElementById('hours-sat').innerText = siteConfig.hoursSat;
+                if (siteConfig.hoursSun) document.getElementById('hours-sun').innerText = siteConfig.hoursSun;
+
+                // Redes Sociais
+                const socialContainer = document.getElementById('footer-socials');
+                socialContainer.innerHTML = '';
+                
+                if (siteConfig.socialFacebook && siteConfig.socialFacebook.trim() !== '') {
+                    socialContainer.innerHTML += `<a href="${siteConfig.socialFacebook}" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-brand-500 hover:text-white transition"><i class="fa-brands fa-facebook-f"></i></a>`;
+                }
+                if (siteConfig.socialWhatsapp && siteConfig.socialWhatsapp.trim() !== '') {
+                    const waLink = siteConfig.socialWhatsapp.startsWith('http') ? siteConfig.socialWhatsapp : `https://wa.me/${siteConfig.socialWhatsapp.replace(/\D/g, '')}`;
+                    socialContainer.innerHTML += `<a href="${waLink}" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-brand-500 hover:text-white transition"><i class="fa-brands fa-whatsapp"></i></a>`;
+                }
+                if (siteConfig.socialLinkedin && siteConfig.socialLinkedin.trim() !== '') {
+                    socialContainer.innerHTML += `<a href="${siteConfig.socialLinkedin}" target="_blank" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-brand-500 hover:text-white transition"><i class="fa-brands fa-linkedin-in"></i></a>`;
+                }
+
                 const navLogo = document.getElementById('nav-logo-container');
                 const footLogo = document.getElementById('footer-logo-container');
                 if (siteConfig.logoBase64) {
                     navLogo.innerHTML = `<img src="${siteConfig.logoBase64}" class="h-10 object-contain">`;
                     footLogo.innerHTML = `<img src="${siteConfig.logoBase64}" class="h-16 object-contain bg-white/5 p-2 rounded-xl">`;
                 } else {
-                    navLogo.innerHTML = `<div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center text-white text-xl"><i class="fa-solid fa-building"></i></div><span class="text-2xl font-bold text-white transition-colors duration-300 logo-text-nav">${siteConfig.brandName}</span>`;
+                    navLogo.innerHTML = `<div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center text-white text-xl"><i class="fa-solid fa-building"></i></div><span class="text-xl sm:text-2xl font-bold text-white transition-colors duration-300 logo-text-nav">${siteConfig.brandName}</span>`;
                     footLogo.innerHTML = `<span class="text-3xl font-bold text-white">${siteConfig.brandName}</span>`;
                 }
 
@@ -338,12 +378,10 @@
             allProperties = snapshot.docs.map(doc => ({ fb_id: doc.id, ...doc.data() }));
             applyFilters();
             
-            // Lógica para terminar o Loading
             if (!dbLoaded) {
                 dbLoaded = true;
-                updateProgress(70, "A carregar fotografias dos imóveis...");
+                updateProgress(70);
                 
-                // Aguarda o render e imagens reais carregarem (Inteligente)
                 setTimeout(() => {
                     const imgs = document.querySelectorAll('img');
                     let loadedCount = 0;
@@ -355,11 +393,10 @@
                     });
                     
                     function checkDone() {
-                        updateProgress(70 + Math.floor((loadedCount / imgs.length) * 20), "A renderizar interface...");
+                        updateProgress(70 + Math.floor((loadedCount / imgs.length) * 20));
                         if(loadedCount >= imgs.length) finalizeLoading();
                     }
                     
-                    // Fallback caso demore muito
                     setTimeout(finalizeLoading, 3000); 
                 }, 100);
             }
@@ -429,6 +466,7 @@
             document.getElementById('details-view').classList.remove('hidden');
             window.scrollTo(0, 0);
             updateNav(true);
+            cleanUrlHash();
         };
 
         window.closeDetails = function() {
@@ -436,10 +474,11 @@
             document.getElementById('home-view').classList.remove('hidden');
             updateNav(false);
             window.scrollTo(0, document.getElementById('imoveis').offsetTop - 50);
+            cleanUrlHash();
         };
 
-        window.resetApp = function() { closeDetails(); document.getElementById('searchInput').value=''; applyFilters(); window.scrollTo(0,0); };
-        window.scrollToGrid = function() { document.getElementById('imoveis').scrollIntoView(); };
+        window.resetApp = function() { closeDetails(); document.getElementById('searchInput').value=''; applyFilters(); window.scrollTo(0,0); cleanUrlHash(); };
+        window.scrollToGrid = function() { document.getElementById('imoveis').scrollIntoView(); cleanUrlHash(); };
 
         function updateNav(forceWhite) {
             const nav = document.getElementById('navbar');

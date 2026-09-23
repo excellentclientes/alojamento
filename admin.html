@@ -25,10 +25,10 @@
         </div>
     </div>
 
-    <header class="bg-slate-900 text-white py-6 px-8 shadow-md">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
+    <header class="bg-slate-900 text-white py-6 px-4 sm:px-8 shadow-md">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-sky-500 rounded-lg flex items-center justify-center text-white text-xl shadow-lg">
+                <div class="w-10 h-10 bg-sky-500 rounded-lg flex items-center justify-center text-white text-xl shadow-lg shrink-0">
                     <i class="fa-solid fa-sliders"></i>
                 </div>
                 <div>
@@ -63,6 +63,26 @@
                         <img id="cfg-hero-preview" class="mt-2 h-20 w-full object-cover hidden border rounded p-1">
                         <input type="hidden" id="cfg-hero-base64">
                     </div>
+
+                    <!-- PERSONALIZAÇÃO DE CORES -->
+                    <div class="border-t pt-3">
+                        <label class="block text-xs font-bold text-slate-800 uppercase mb-2">Cores do Site</label>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="block text-[10px] text-slate-500">Texto Azul</label>
+                                <input type="color" id="cfg-color-blue" value="#0284c7" class="w-full h-9 p-1 rounded border border-slate-300 cursor-pointer">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-slate-500">Texto Branco</label>
+                                <input type="color" id="cfg-color-white" value="#ffffff" class="w-full h-9 p-1 rounded border border-slate-300 cursor-pointer">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] text-slate-500">Fundo Rodapé</label>
+                                <input type="color" id="cfg-color-footer" value="#0f172a" class="w-full h-9 p-1 rounded border border-slate-300 cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+
                     <div>
                         <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Nome da Empresa</label>
                         <input type="text" id="cfg-brand" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
@@ -75,7 +95,42 @@
                         <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Subtítulo Inicial</label>
                         <input type="text" id="cfg-hero-subtitle" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
                     </div>
-                    <div>
+
+                    <!-- HORÁRIO DE ATENDIMENTO -->
+                    <div class="border-t pt-3 space-y-2">
+                        <label class="block text-xs font-bold text-slate-800 uppercase">Horário de Atendimento</label>
+                        <div>
+                            <label class="block text-[10px] text-slate-500">Segunda a Sexta</label>
+                            <input type="text" id="cfg-hours-week" placeholder="09:00 - 18:00" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs outline-none focus:border-sky-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-slate-500">Sábados</label>
+                            <input type="text" id="cfg-hours-sat" placeholder="10:00 - 14:00" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs outline-none focus:border-sky-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-slate-500">Domingos</label>
+                            <input type="text" id="cfg-hours-sun" placeholder="Fechado" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs outline-none focus:border-sky-500">
+                        </div>
+                    </div>
+
+                    <!-- REDES SOCIAIS -->
+                    <div class="border-t pt-3 space-y-2">
+                        <label class="block text-xs font-bold text-slate-800 uppercase">Redes Sociais (Link Completo)</label>
+                        <div>
+                            <label class="block text-[10px] text-slate-500">Facebook</label>
+                            <input type="url" id="cfg-facebook" placeholder="https://facebook.com/sua-pagina" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs outline-none focus:border-sky-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-slate-500">WhatsApp (Link direct/número)</label>
+                            <input type="text" id="cfg-social-whatsapp" placeholder="https://wa.me/351..." class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs outline-none focus:border-sky-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-slate-500">LinkedIn</label>
+                            <input type="url" id="cfg-linkedin" placeholder="https://linkedin.com/in/seu-perfil" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs outline-none focus:border-sky-500">
+                        </div>
+                    </div>
+
+                    <div class="border-t pt-3">
                         <label class="block text-xs font-bold text-slate-600 uppercase mb-1">WhatsApp (com 351)</label>
                         <input type="text" id="cfg-whatsapp" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
                     </div>
@@ -239,6 +294,22 @@
                 document.getElementById('cfg-whatsapp').value = data.whatsapp || "";
                 document.getElementById('cfg-email').value = data.email || "";
                 document.getElementById('cfg-footer-desc').value = data.footerText || "";
+                
+                // Cores
+                document.getElementById('cfg-color-blue').value = data.colorBlue || "#0284c7";
+                document.getElementById('cfg-color-white').value = data.colorWhite || "#ffffff";
+                document.getElementById('cfg-color-footer').value = data.colorFooter || "#0f172a";
+
+                // Horários
+                document.getElementById('cfg-hours-week').value = data.hoursWeek || "09:00 - 18:00";
+                document.getElementById('cfg-hours-sat').value = data.hoursSat || "10:00 - 14:00";
+                document.getElementById('cfg-hours-sun').value = data.hoursSun || "Fechado";
+
+                // Redes Sociais
+                document.getElementById('cfg-facebook').value = data.socialFacebook || "";
+                document.getElementById('cfg-social-whatsapp').value = data.socialWhatsapp || "";
+                document.getElementById('cfg-linkedin').value = data.socialLinkedin || "";
+
                 if (data.logoBase64) {
                     document.getElementById('cfg-logo-base64').value = data.logoBase64;
                     document.getElementById('cfg-logo-preview').src = data.logoBase64;
@@ -270,12 +341,21 @@
                     whatsapp: document.getElementById('cfg-whatsapp').value,
                     email: document.getElementById('cfg-email').value,
                     footerText: document.getElementById('cfg-footer-desc').value,
+                    colorBlue: document.getElementById('cfg-color-blue').value,
+                    colorWhite: document.getElementById('cfg-color-white').value,
+                    colorFooter: document.getElementById('cfg-color-footer').value,
+                    hoursWeek: document.getElementById('cfg-hours-week').value,
+                    hoursSat: document.getElementById('cfg-hours-sat').value,
+                    hoursSun: document.getElementById('cfg-hours-sun').value,
+                    socialFacebook: document.getElementById('cfg-facebook').value,
+                    socialWhatsapp: document.getElementById('cfg-social-whatsapp').value,
+                    socialLinkedin: document.getElementById('cfg-linkedin').value,
                     logoBase64: document.getElementById('cfg-logo-base64').value,
                     heroImageBase64: document.getElementById('cfg-hero-base64').value
                 }, { merge: true });
                 showSuccessModal("Site atualizado com sucesso!");
             } catch (error) {
-                alert("Erro ao guardar. Verifique as regras do Firebase.");
+                alert("Erro ao guardar as alterações. Por favor, tente novamente.");
                 modal.classList.add('hidden');
             }
         });
@@ -323,7 +403,7 @@
                 resetPropertyForm();
                 showSuccessModal("Imóvel publicado!");
             } catch (error) {
-                alert("Erro ao guardar. Verifique as regras do Firebase.");
+                alert("Erro ao guardar o imóvel. Por favor, tente novamente.");
                 modal.classList.add('hidden');
             }
         });
