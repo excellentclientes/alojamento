@@ -16,239 +16,372 @@
 
     <style>
         html { scroll-behavior: smooth; }
-        body { font-family: 'Poppins', sans-serif; background-color: #f9fafb; color: #1f2937; overflow-x: hidden; }
+        body { font-family: 'Poppins', sans-serif; background-color: #1e293b; color: #1f2937; overflow-x: hidden; margin: 0; }
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-thumb { background: #0c4a6e; border-radius: 4px; }
         .hero-gradient { background: linear-gradient(to bottom, rgba(8, 47, 73, 0.85), rgba(8, 47, 73, 0.4)); }
         .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
-        .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; opacity: 0; transform: translateY(20px); }
-        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        
+        /* Loading Styles */
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s ease-out;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        
+        /* Efeito de Janela abrindo */
+        .window-reveal { 
+            animation: windowOpen 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+            background-color: #f9fafb;
+        }
+        @keyframes windowOpen {
+            0% { opacity: 0; transform: scale(0.92) translateY(30px); border-radius: 40px; }
+            100% { opacity: 1; transform: scale(1) translateY(0); border-radius: 0px; }
+        }
+        
+        #app-wrapper { opacity: 0; height: 100vh; overflow: hidden; }
+        #app-wrapper.loaded { opacity: 1; height: auto; overflow: visible; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <!-- NAVBAR COM LOGO DINÂMICA -->
-    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 bg-transparent">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+    <!-- TELA DE LOADING MODERNA -->
+    <div id="loader-screen" class="fixed inset-0 z-[999] bg-slate-900 flex flex-col items-center justify-center transition-all duration-700">
+        <div class="relative flex flex-col items-center">
+            <!-- Anel SVG Moderno -->
+            <svg class="w-32 h-32" viewBox="0 0 120 120">
+                <!-- Circulo de Fundo -->
+                <circle class="text-slate-800 stroke-current" stroke-width="8" cx="60" cy="60" r="50" fill="transparent"></circle>
+                <!-- Circulo de Progresso -->
+                <circle id="progress-circle" class="text-brand-500 stroke-current progress-ring__circle" stroke-width="8" stroke-linecap="round" cx="60" cy="60" r="50" fill="transparent" stroke-dasharray="314" stroke-dashoffset="314"></circle>
+            </svg>
             
-            <div class="flex items-center gap-2 cursor-pointer group" onclick="resetApp()">
-                <!-- O JS vai injetar aqui a imagem ou o texto -->
-                <div id="nav-logo-container" class="flex items-center gap-2">
-                    <div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center text-white text-xl shadow-lg"><i class="fa-solid fa-building"></i></div>
-                    <span id="logo-text" class="text-2xl font-bold text-white transition-colors duration-300">A Carregar...</span>
-                </div>
+            <!-- Porcentagem no centro -->
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[60%] flex flex-col items-center">
+                <span id="progress-text" class="text-2xl font-bold text-white">0%</span>
             </div>
-
-            <div class="hidden md:flex space-x-8 items-center">
-                <a href="#" onclick="resetApp(); return false;" class="nav-link text-white font-medium">Início</a>
-                <button onclick="openWhatsApp()" class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-2 rounded-full font-medium transition shadow-lg">
-                    <i class="fa-brands fa-whatsapp"></i> Contactar
-                </button>
-            </div>
+            
+            <p id="loader-message" class="text-slate-400 mt-6 font-medium animate-pulse">A conectar com o servidor...</p>
         </div>
-    </nav>
+    </div>
 
-    <main id="app-container" class="flex-grow">
-        <!-- VISTA INICIAL -->
-        <div id="home-view" class="block">
-            
-            <!-- CAPA (HERO) DINÂMICA -->
-            <header class="relative h-screen min-h-[650px] flex items-center justify-center">
-                <div class="absolute inset-0 z-0">
-                    <img id="hero-bg-img" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" class="w-full h-full object-cover object-center">
-                    <div class="absolute inset-0 hero-gradient z-10"></div>
-                </div>
-
-                <div class="relative z-20 text-center px-4 w-full max-w-6xl mx-auto mt-16" data-aos="zoom-in">
-                    <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 drop-shadow-lg" id="hero-title">
-                        <span id="hero-t1">Encontre o imóvel</span><br><span class="text-brand-500" id="hero-t2">dos seus sonhos.</span>
-                    </h1>
-                    
-                    <!-- Filtros -->
-                    <div class="glass p-4 rounded-3xl md:rounded-full shadow-2xl mx-auto mt-10 text-left relative z-30 max-w-4xl">
-                        <form id="search-form" class="grid grid-cols-1 md:grid-cols-3 gap-4" onsubmit="event.preventDefault();">
-                            <div class="px-4 py-2 border-b md:border-b-0 md:border-r border-gray-200">
-                                <label class="block text-xs font-semibold text-gray-500 uppercase">Pesquisa</label>
-                                <input type="text" id="searchInput" placeholder="Localização, Referência..." class="w-full bg-transparent outline-none mt-1">
-                            </div>
-                            <div class="px-4 py-2 border-b md:border-b-0 md:border-r border-gray-200">
-                                <label class="block text-xs font-semibold text-gray-500 uppercase">Tipo</label>
-                                <select id="typeInput" class="w-full bg-transparent outline-none mt-1">
-                                    <option value="">Todos</option>
-                                    <option value="Apartamento">Apartamento</option>
-                                    <option value="Moradia">Moradia</option>
-                                    <option value="Terreno">Terreno</option>
-                                </select>
-                            </div>
-                            <div class="px-2 flex items-center">
-                                <button type="button" onclick="scrollToGrid()" class="w-full bg-brand-900 text-white h-12 rounded-full font-semibold shadow-lg">Ver Resultados</button>
-                            </div>
-                        </form>
+    <!-- WRAPPER DO SITE (Abre como Janela) -->
+    <div id="app-wrapper">
+        <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 bg-transparent">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+                <div class="flex items-center gap-2 cursor-pointer group" onclick="resetApp()">
+                    <div id="nav-logo-container" class="flex items-center gap-2">
+                        <div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center text-white text-xl shadow-lg"><i class="fa-solid fa-building"></i></div>
+                        <span id="logo-text" class="text-2xl font-bold text-white transition-colors duration-300">A Carregar...</span>
                     </div>
                 </div>
-            </header>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#" onclick="resetApp(); return false;" class="nav-link text-white font-medium hover:text-brand-400 transition">Início</a>
+                    <button onclick="openWhatsApp()" class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-2 rounded-full font-medium transition shadow-lg flex items-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-lg"></i> Contactar
+                    </button>
+                </div>
+            </div>
+        </nav>
 
-            <section id="imoveis" class="py-24 bg-gray-50 min-h-screen relative z-20">
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex justify-between items-end mb-10 border-b pb-4">
-                        <h2 class="text-3xl font-bold text-gray-900">Catálogo de Imóveis</h2>
-                        <button onclick="resetApp()" class="text-sm text-brand-600 font-medium"><i class="fa-solid fa-rotate-right"></i> Limpar Filtros</button>
+        <main id="app-container" class="flex-grow">
+            <!-- VISTA INICIAL -->
+            <div id="home-view" class="block">
+                <header class="relative h-screen min-h-[650px] flex items-center justify-center">
+                    <div class="absolute inset-0 z-0">
+                        <img id="hero-bg-img" src="" class="w-full h-full object-cover object-center hidden">
+                        <div class="absolute inset-0 hero-gradient z-10"></div>
                     </div>
 
-                    <div id="properties-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
-                </div>
-            </section>
-        </div>
-
-        <!-- SUB-PÁGINA DO IMÓVEL (COM GALERIA) -->
-        <div id="details-view" class="hidden pt-28 pb-20 bg-gray-50 min-h-screen">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                
-                <button onclick="closeDetails()" class="flex items-center text-gray-600 bg-white px-5 py-2.5 rounded-full shadow-sm border border-gray-200 w-fit mb-8">
-                    <i class="fa-solid fa-arrow-left mr-2"></i> Voltar
-                </button>
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2">
-                        <!-- Imagem Principal -->
-                        <div class="rounded-2xl overflow-hidden shadow-lg bg-white relative">
-                            <img id="detail-main-img" src="" class="w-full aspect-[4/3] md:aspect-[16/9] object-cover transition-opacity duration-300">
-                        </div>
+                    <div class="relative z-20 text-center px-4 w-full max-w-6xl mx-auto mt-16" data-aos="zoom-in">
+                        <h1 class="text-4xl md:text-6xl md:leading-tight font-bold text-white mb-6 drop-shadow-lg" id="hero-title">
+                            <span id="hero-t1">Encontre o imóvel</span><br><span class="text-brand-500" id="hero-t2">dos seus sonhos.</span>
+                        </h1>
                         
-                        <!-- Galeria Injetada Aqui -->
-                        <div id="detail-thumbnails" class="grid grid-cols-4 md:grid-cols-6 gap-2 sm:gap-4 mt-4"></div>
+                        <div class="glass p-4 rounded-3xl md:rounded-full shadow-2xl mx-auto mt-10 text-left relative z-30 max-w-4xl">
+                            <form id="search-form" class="grid grid-cols-1 md:grid-cols-3 gap-4" onsubmit="event.preventDefault();">
+                                <div class="px-4 py-2 border-b md:border-b-0 md:border-r border-gray-200">
+                                    <label class="block text-xs font-semibold text-gray-500 uppercase">Pesquisa</label>
+                                    <input type="text" id="searchInput" placeholder="Localização, Referência..." class="w-full bg-transparent outline-none mt-1 text-slate-800">
+                                </div>
+                                <div class="px-4 py-2 border-b md:border-b-0 md:border-r border-gray-200">
+                                    <label class="block text-xs font-semibold text-gray-500 uppercase">Tipo</label>
+                                    <select id="typeInput" class="w-full bg-transparent outline-none mt-1 text-slate-800">
+                                        <option value="">Todos</option>
+                                        <option value="Apartamento">Apartamento</option>
+                                        <option value="Moradia">Moradia</option>
+                                        <option value="Terreno">Terreno</option>
+                                    </select>
+                                </div>
+                                <div class="px-2 flex items-center">
+                                    <button type="button" onclick="scrollToGrid()" class="w-full bg-brand-900 hover:bg-brand-950 text-white h-12 rounded-full font-semibold shadow-lg transition">Ver Resultados</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </header>
 
-                        <!-- Título Dinâmico -->
-                        <div class="mt-8 flex justify-between items-start flex-wrap gap-4">
-                            <div>
-                                <h1 id="detail-title" class="text-3xl font-bold text-gray-900 mb-2">Título do Imóvel</h1>
-                                <p id="detail-location" class="text-gray-500 text-lg"><i class="fa-solid fa-location-dot text-brand-500 mr-2"></i>Local</p>
+                <section id="imoveis" class="py-24 min-h-screen relative z-20 bg-gray-50">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="flex justify-between items-end mb-10 border-b pb-4">
+                            <h2 class="text-3xl font-bold text-gray-900">Catálogo de Imóveis</h2>
+                            <button onclick="resetApp()" class="text-sm text-brand-600 font-medium hover:underline"><i class="fa-solid fa-rotate-right"></i> Limpar Filtros</button>
+                        </div>
+                        <div id="properties-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- SUB-PÁGINA DO IMÓVEL -->
+            <div id="details-view" class="hidden pt-28 pb-20 bg-gray-50 min-h-screen">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <button onclick="closeDetails()" class="flex items-center text-gray-600 hover:text-brand-600 bg-white px-5 py-2.5 rounded-full shadow-sm border border-gray-200 w-fit mb-8 transition">
+                        <i class="fa-solid fa-arrow-left mr-2"></i> Voltar
+                    </button>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <div class="lg:col-span-2">
+                            <div class="rounded-2xl overflow-hidden shadow-lg bg-white relative">
+                                <img id="detail-main-img" src="" class="w-full aspect-[4/3] md:aspect-[16/9] object-cover transition-opacity duration-300">
                             </div>
-                            <p id="detail-price" class="text-4xl font-bold text-brand-900">0 €</p>
+                            <div id="detail-thumbnails" class="grid grid-cols-4 md:grid-cols-6 gap-2 sm:gap-4 mt-4"></div>
+
+                            <div class="mt-8 flex justify-between items-start flex-wrap gap-4">
+                                <div>
+                                    <h1 id="detail-title" class="text-3xl font-bold text-gray-900 mb-2">Título do Imóvel</h1>
+                                    <p id="detail-location" class="text-gray-500 text-lg"><i class="fa-solid fa-location-dot text-brand-500 mr-2"></i>Local</p>
+                                </div>
+                                <p id="detail-price" class="text-4xl font-bold text-brand-900">0 €</p>
+                            </div>
+
+                            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-8 grid grid-cols-2 md:grid-cols-4 gap-6">
+                                <div><p class="text-gray-400 text-xs uppercase mb-1">Quartos</p><p id="spec-beds" class="font-bold text-lg"><i class="fa-solid fa-bed text-brand-500"></i> 0</p></div>
+                                <div><p class="text-gray-400 text-xs uppercase mb-1">WC</p><p id="spec-baths" class="font-bold text-lg"><i class="fa-solid fa-bath text-brand-500"></i> 0</p></div>
+                                <div><p class="text-gray-400 text-xs uppercase mb-1">Área</p><p id="spec-area" class="font-bold text-lg"><i class="fa-solid fa-ruler-combined text-brand-500"></i> 0 m²</p></div>
+                                <div><p class="text-gray-400 text-xs uppercase mb-1">Ano</p><p id="spec-year" class="font-bold text-lg"><i class="fa-solid fa-calendar text-brand-500"></i> 2024</p></div>
+                            </div>
+
+                            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-8">
+                                <h3 class="text-xl font-bold text-gray-900 mb-4">Descrição</h3>
+                                <div id="detail-description" class="text-gray-600 space-y-4 leading-relaxed text-justify whitespace-pre-line"></div>
+                            </div>
                         </div>
 
-                        <!-- Características Dinâmicas -->
-                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-8 grid grid-cols-2 md:grid-cols-4 gap-6">
-                            <div><p class="text-gray-400 text-xs uppercase mb-1">Quartos</p><p id="spec-beds" class="font-bold text-lg"><i class="fa-solid fa-bed text-brand-500"></i> 0</p></div>
-                            <div><p class="text-gray-400 text-xs uppercase mb-1">WC</p><p id="spec-baths" class="font-bold text-lg"><i class="fa-solid fa-bath text-brand-500"></i> 0</p></div>
-                            <div><p class="text-gray-400 text-xs uppercase mb-1">Área</p><p id="spec-area" class="font-bold text-lg"><i class="fa-solid fa-ruler-combined text-brand-500"></i> 0 m²</p></div>
-                            <div><p class="text-gray-400 text-xs uppercase mb-1">Ano</p><p id="spec-year" class="font-bold text-lg"><i class="fa-solid fa-calendar text-brand-500"></i> 2024</p></div>
-                        </div>
-
-                        <!-- Descrição Dinâmica -->
-                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-8">
-                            <h3 class="text-xl font-bold text-gray-900 mb-4">Descrição</h3>
-                            <div id="detail-description" class="text-gray-600 space-y-4 leading-relaxed text-justify whitespace-pre-line"></div>
-                        </div>
-                    </div>
-
-                    <div class="lg:col-span-1">
-                        <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 sticky top-28">
-                            <h4 class="font-bold text-gray-800 mb-4">Falar com Consultor</h4>
-                            <p class="text-sm text-gray-500 mb-6">Entre em contacto direto para mais informações.</p>
-                            <button onclick="openWhatsApp()" class="w-full bg-emerald-600 text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2">
-                                <i class="fa-brands fa-whatsapp text-xl"></i> WhatsApp
-                            </button>
+                        <div class="lg:col-span-1">
+                            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 sticky top-28">
+                                <h4 class="font-bold text-gray-800 mb-4 text-xl">Tem interesse?</h4>
+                                <p class="text-sm text-gray-500 mb-6">Entre em contacto direto com o consultor para agendar uma visita ou esclarecer dúvidas.</p>
+                                <button onclick="openWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 transition text-white py-4 rounded-xl font-bold flex items-center justify-center gap-3 shadow-lg shadow-emerald-200">
+                                    <i class="fa-brands fa-whatsapp text-2xl"></i> Falar no WhatsApp
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
 
-    <!-- RODAPÉ DINÂMICO -->
-    <footer id="footer" class="bg-gray-900 text-white pt-16 pb-8 border-t border-gray-800 relative z-30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
-                <div>
-                    <!-- Logo no Rodapé -->
-                    <div id="footer-logo-container" class="mb-4"></div>
-                    <p id="footer-desc" class="text-gray-400 text-sm leading-relaxed mb-6">A sua imobiliária de confiança.</p>
+        <!-- RODAPÉ PREMIUM COMPLETO -->
+        <footer id="footer" class="bg-slate-900 text-white pt-20 pb-10 border-t-4 border-brand-500 relative z-30">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                    
+                    <!-- Coluna 1: Sobre -->
+                    <div>
+                        <div id="footer-logo-container" class="mb-6"></div>
+                        <p id="footer-desc" class="text-slate-400 text-sm leading-relaxed mb-6">
+                            Ajudamos a encontrar o espaço perfeito para escrever o próximo capítulo da sua vida. Transparência, confiança e dedicação em cada negócio.
+                        </p>
+                        <div class="flex space-x-4">
+                            <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-brand-500 hover:text-white transition"><i class="fa-brands fa-facebook-f"></i></a>
+                            <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-brand-500 hover:text-white transition"><i class="fa-brands fa-instagram"></i></a>
+                            <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-brand-500 hover:text-white transition"><i class="fa-brands fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Coluna 2: Links Úteis -->
+                    <div>
+                        <h3 class="text-lg font-bold mb-6 text-white border-b border-slate-700 pb-2 inline-block">Links Úteis</h3>
+                        <ul class="space-y-3">
+                            <li><a href="#" onclick="resetApp(); return false;" class="text-slate-400 hover:text-brand-400 transition text-sm flex items-center"><i class="fa-solid fa-chevron-right text-xs mr-2 text-brand-500"></i> Início</a></li>
+                            <li><a href="#" onclick="scrollToGrid(); return false;" class="text-slate-400 hover:text-brand-400 transition text-sm flex items-center"><i class="fa-solid fa-chevron-right text-xs mr-2 text-brand-500"></i> Ver Imóveis</a></li>
+                            <li><a href="#" onclick="openWhatsApp()" class="text-slate-400 hover:text-brand-400 transition text-sm flex items-center"><i class="fa-solid fa-chevron-right text-xs mr-2 text-brand-500"></i> Fale Connosco</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Coluna 3: Horários -->
+                    <div>
+                        <h3 class="text-lg font-bold mb-6 text-white border-b border-slate-700 pb-2 inline-block">Atendimento</h3>
+                        <ul class="space-y-3 text-sm text-slate-400">
+                            <li class="flex justify-between border-b border-slate-800 pb-1"><span>Seg - Sex:</span> <span class="text-white">09:00 - 18:00</span></li>
+                            <li class="flex justify-between border-b border-slate-800 pb-1"><span>Sábados:</span> <span class="text-white">10:00 - 14:00</span></li>
+                            <li class="flex justify-between pb-1"><span>Domingos:</span> <span class="text-brand-400">Fechado</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Coluna 4: Contactos -->
+                    <div>
+                        <h3 class="text-lg font-bold mb-6 text-white border-b border-slate-700 pb-2 inline-block">Contactos Rápidos</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-start">
+                                <i class="fa-brands fa-whatsapp text-emerald-500 text-xl mt-1 mr-3"></i>
+                                <div><p class="text-xs text-slate-500 uppercase font-bold">WhatsApp Direto</p><p id="footer-phone" class="text-white font-medium">+351 000 000 000</p></div>
+                            </div>
+                            <div class="flex items-start">
+                                <i class="fa-solid fa-envelope text-brand-500 text-xl mt-1 mr-3"></i>
+                                <div><p class="text-xs text-slate-500 uppercase font-bold">Email</p><p id="footer-email" class="text-white font-medium text-sm">geral@imobiliaria.pt</p></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="text-lg font-bold mb-6 text-white border-b border-gray-700 pb-2 inline-block">Contactos</h3>
-                    <p class="flex items-center text-gray-400"><i class="fa-brands fa-whatsapp text-emerald-500 mr-3"></i> <span id="footer-phone">+351 000 000 000</span></p>
+                
+                <div class="border-t border-slate-800 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-slate-500 text-sm">© 2024 <span id="footer-copy-name">Imobiliária</span>. Todos os direitos reservados.</p>
+                    <p class="text-slate-600 text-xs mt-2 md:mt-0">Criado com foco em resultados.</p>
                 </div>
             </div>
-        </div>
-    </footer>
+        </footer>
+    </div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, onSnapshot, collection, initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const app = initializeApp({
             apiKey: "AIzaSyCx8OyFbqjgaJ8SUs1xfMuK8Tbeg6MklJY",
             authDomain: "alojamento-c4f0a.firebaseapp.com",
             projectId: "alojamento-c4f0a"
         });
-        const db = getFirestore(app);
+
+        // INICIAR FIREBASE COM CACHE OFFLINE (Salva no Navegador)
+        const db = initializeFirestore(app, {
+            localCache: persistentLocalCache({tabManager: persistentMultipleTabManager()})
+        });
 
         let siteConfig = { brandName: "Imobiliária", whatsapp: "351912345678" };
         let allProperties = [];
         let filteredProperties = [];
 
-        // 1. SINCRONIZAR VISUAL E TEXTOS (LOGO, CAPA E RODAPÉ)
+        // LÓGICA DE CARREGAMENTO INTELIGENTE
+        let loadProgress = 0;
+        let isInitialLoadDone = false;
+        let dbLoaded = false;
+        
+        function updateProgress(value, message) {
+            if(isInitialLoadDone) return;
+            loadProgress = Math.max(loadProgress, value);
+            document.getElementById('progress-text').innerText = `${loadProgress}%`;
+            document.getElementById('loader-message').innerText = message;
+            
+            // Calculo da circunferência do SVG (2 * PI * r) = 314
+            const offset = 314 - (loadProgress / 100) * 314;
+            document.getElementById('progress-circle').style.strokeDashoffset = offset;
+        }
+
+        // Simula progresso até 40% enquanto a página constrói
+        let progressInterval = setInterval(() => {
+            if (loadProgress < 40) updateProgress(loadProgress + 5, "A verificar cache do navegador...");
+        }, 100);
+
+        function finalizeLoading() {
+            if(isInitialLoadDone) return;
+            clearInterval(progressInterval);
+            updateProgress(100, "Tudo pronto!");
+            
+            setTimeout(() => {
+                isInitialLoadDone = true;
+                const loader = document.getElementById('loader-screen');
+                const wrapper = document.getElementById('app-wrapper');
+                
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    wrapper.classList.add('loaded', 'window-reveal');
+                    AOS.init({ once: true });
+                }, 700);
+            }, 500);
+        }
+
+        // SINCRONIZAR CONFIGURAÇÕES
         onSnapshot(doc(db, "settings", "general"), (docSnap) => {
             if (docSnap.exists()) {
                 siteConfig = { ...siteConfig, ...docSnap.data() };
-                
-                // Textos
                 document.getElementById('page-title').innerText = siteConfig.brandName;
                 document.getElementById('hero-t1').innerText = siteConfig.heroTitle || "Encontre o imóvel";
                 document.getElementById('hero-t2').innerText = siteConfig.heroSubtitle || "perfeito para si.";
                 document.getElementById('footer-desc').innerText = siteConfig.footerText || "A sua imobiliária de confiança.";
                 document.getElementById('footer-phone').innerText = "+" + siteConfig.whatsapp;
+                document.getElementById('footer-email').innerText = siteConfig.email || "contacto@imobiliaria.pt";
+                document.getElementById('footer-copy-name').innerText = siteConfig.brandName;
 
-                // Logo Dinâmica
                 const navLogo = document.getElementById('nav-logo-container');
                 const footLogo = document.getElementById('footer-logo-container');
                 if (siteConfig.logoBase64) {
                     navLogo.innerHTML = `<img src="${siteConfig.logoBase64}" class="h-10 object-contain">`;
-                    footLogo.innerHTML = `<img src="${siteConfig.logoBase64}" class="h-12 object-contain bg-white/10 p-1 rounded">`;
+                    footLogo.innerHTML = `<img src="${siteConfig.logoBase64}" class="h-16 object-contain bg-white/5 p-2 rounded-xl">`;
                 } else {
                     navLogo.innerHTML = `<div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center text-white text-xl"><i class="fa-solid fa-building"></i></div><span class="text-2xl font-bold text-white transition-colors duration-300 logo-text-nav">${siteConfig.brandName}</span>`;
-                    footLogo.innerHTML = `<span class="text-2xl font-bold text-white">${siteConfig.brandName}</span>`;
+                    footLogo.innerHTML = `<span class="text-3xl font-bold text-white">${siteConfig.brandName}</span>`;
                 }
 
-                // Imagem de Capa (Hero)
                 if (siteConfig.heroImageBase64) {
-                    document.getElementById('hero-bg-img').src = siteConfig.heroImageBase64;
+                    const heroBg = document.getElementById('hero-bg-img');
+                    heroBg.src = siteConfig.heroImageBase64;
+                    heroBg.classList.remove('hidden');
                 }
             }
         });
 
-        // 2. SINCRONIZAR IMÓVEIS (COLEÇÃO)
+        // SINCRONIZAR IMÓVEIS
         onSnapshot(collection(db, "properties"), (snapshot) => {
             allProperties = snapshot.docs.map(doc => ({ fb_id: doc.id, ...doc.data() }));
             applyFilters();
+            
+            // Lógica para terminar o Loading
+            if (!dbLoaded) {
+                dbLoaded = true;
+                updateProgress(70, "A carregar fotografias dos imóveis...");
+                
+                // Aguarda o render e imagens reais carregarem (Inteligente)
+                setTimeout(() => {
+                    const imgs = document.querySelectorAll('img');
+                    let loadedCount = 0;
+                    if(imgs.length === 0) { finalizeLoading(); return; }
+                    
+                    imgs.forEach(img => {
+                        if(img.complete) { loadedCount++; checkDone(); }
+                        else { img.onload = () => { loadedCount++; checkDone(); }; img.onerror = () => { loadedCount++; checkDone(); }; }
+                    });
+                    
+                    function checkDone() {
+                        updateProgress(70 + Math.floor((loadedCount / imgs.length) * 20), "A renderizar interface...");
+                        if(loadedCount >= imgs.length) finalizeLoading();
+                    }
+                    
+                    // Fallback caso demore muito
+                    setTimeout(finalizeLoading, 3000); 
+                }, 100);
+            }
         });
 
-        // WhatsApp
-        window.openWhatsApp = function() {
-            window.open(`https://wa.me/${siteConfig.whatsapp.replace(/\D/g, '')}?text=Olá! Gostaria de informações.`, '_blank');
-        };
+        window.openWhatsApp = function() { window.open(`https://wa.me/${siteConfig.whatsapp.replace(/\D/g, '')}?text=Olá! Estou no vosso site e gostaria de mais informações.`, '_blank'); };
 
-        // Pesquisa
         function applyFilters() {
             const search = document.getElementById('searchInput').value.toLowerCase();
             const type = document.getElementById('typeInput').value;
-            filteredProperties = allProperties.filter(p => {
-                return (!type || p.type === type) && (!search || p.title.toLowerCase().includes(search) || p.location.toLowerCase().includes(search));
-            });
+            filteredProperties = allProperties.filter(p => (!type || p.type === type) && (!search || p.title.toLowerCase().includes(search) || p.location.toLowerCase().includes(search)));
             renderProperties();
         }
         document.getElementById('searchInput').addEventListener('input', applyFilters);
         document.getElementById('typeInput').addEventListener('change', applyFilters);
 
-        // Renderizar Grelha
         function renderProperties() {
             const grid = document.getElementById('properties-grid');
             grid.innerHTML = '';
-            filteredProperties.forEach((prop, index) => {
+            filteredProperties.forEach((prop) => {
                 grid.innerHTML += `
-                    <div class="group cursor-pointer bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all hover:-translate-y-2 border border-gray-100 fade-in-up" onclick="openDetails('${prop.fb_id}')">
+                    <div class="group cursor-pointer bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all hover:-translate-y-2 border border-gray-100" onclick="openDetails('${prop.fb_id}')">
                         <div class="relative h-64 overflow-hidden">
                             <img src="${prop.mainImage}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         </div>
@@ -262,46 +395,32 @@
                                 <div><i class="fa-solid fa-ruler text-brand-500 mr-1"></i> ${prop.area}m²</div>
                             </div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
         }
 
-        // ABRIR DETALHES COM GALERIA DE IMAGENS
         window.openDetails = function(fb_id) {
             const prop = allProperties.find(p => p.fb_id === fb_id);
             if (!prop) return;
-
             document.getElementById('detail-title').innerText = prop.title;
             document.getElementById('detail-price').innerText = prop.price.toLocaleString('pt-PT') + " €";
             document.getElementById('detail-location').innerHTML = `<i class="fa-solid fa-location-dot text-brand-500 mr-2"></i>${prop.location}`;
-            
-            // Características
             document.getElementById('spec-beds').innerHTML = `<i class="fa-solid fa-bed text-brand-500 mr-2"></i>${prop.beds}`;
             document.getElementById('spec-baths').innerHTML = `<i class="fa-solid fa-bath text-brand-500 mr-2"></i>${prop.baths}`;
             document.getElementById('spec-area').innerHTML = `<i class="fa-solid fa-ruler-combined text-brand-500 mr-2"></i>${prop.area} m²`;
             document.getElementById('spec-year').innerHTML = `<i class="fa-solid fa-calendar text-brand-500 mr-2"></i>${prop.year}`;
-            
-            // Descrição (preservando quebras de linha)
             document.getElementById('detail-description').innerText = prop.description;
 
-            // Galeria de Imagens
             const mainImg = document.getElementById('detail-main-img');
             mainImg.src = prop.mainImage;
-            
             const thumbs = document.getElementById('detail-thumbnails');
             thumbs.innerHTML = '';
             
-            // Junta a imagem principal com a galeria (se existir)
             const allImages = [prop.mainImage, ...(prop.gallery || [])];
-            
             allImages.forEach(imgUrl => {
                 const thumb = document.createElement('div');
                 thumb.className = "cursor-pointer rounded-lg overflow-hidden border-2 border-transparent hover:border-brand-500 transition-colors h-16 sm:h-24";
-                thumb.onclick = () => {
-                    mainImg.style.opacity = 0.5;
-                    setTimeout(() => { mainImg.src = imgUrl; mainImg.style.opacity = 1; }, 150);
-                };
+                thumb.onclick = () => { mainImg.style.opacity = 0.5; setTimeout(() => { mainImg.src = imgUrl; mainImg.style.opacity = 1; }, 150); };
                 thumb.innerHTML = `<img src="${imgUrl}" class="w-full h-full object-cover">`;
                 thumbs.appendChild(thumb);
             });
@@ -329,17 +448,15 @@
 
             if (forceWhite || window.scrollY > 50) {
                 nav.classList.add('bg-white', 'shadow-md');
-                links.forEach(l => l.classList.replace('text-white', 'text-gray-700'));
+                links.forEach(l => l.classList.replace('text-white', 'text-slate-700'));
                 logoTexts.forEach(l => l.classList.replace('text-white', 'text-brand-900'));
             } else {
                 nav.classList.remove('bg-white', 'shadow-md');
-                links.forEach(l => l.classList.replace('text-gray-700', 'text-white'));
+                links.forEach(l => l.classList.replace('text-slate-700', 'text-white'));
                 logoTexts.forEach(l => l.classList.replace('text-brand-900', 'text-white'));
             }
         }
         window.addEventListener('scroll', () => { if(document.getElementById('details-view').classList.contains('hidden')) updateNav(); });
-
-        AOS.init();
     </script>
 </body>
 </html>
