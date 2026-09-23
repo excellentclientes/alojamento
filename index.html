@@ -3,162 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Lumière Imóveis | A sua Casa de Sonho</title>
+    <title id="page-title">Imobiliária | A sua Casa de Sonho</title>
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts: Poppins -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- AOS Animation CSS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Poppins', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            500: '#0ea5e9',
-                            600: '#0284c7',
-                            900: '#0c4a6e',
-                            950: '#082f49'
-                        }
-                    }
-                }
-            }
-        }
+        tailwind.config = { theme: { extend: { fontFamily: { sans: ['Poppins', 'sans-serif'], }, colors: { brand: { 50: '#f0f9ff', 500: '#0ea5e9', 600: '#0284c7', 900: '#0c4a6e', 950: '#082f49' } } } } }
     </script>
 
     <style>
         html { scroll-behavior: smooth; }
         body { font-family: 'Poppins', sans-serif; background-color: #f9fafb; color: #1f2937; overflow-x: hidden; }
-        
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #0c4a6e; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #0284c7; }
-
         .hero-gradient { background: linear-gradient(to bottom, rgba(8, 47, 73, 0.85), rgba(8, 47, 73, 0.4)); }
-        
-        .glass {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
+        .glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
         .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; opacity: 0; transform: translateY(20px); }
-        .fade-in { animation: fadeIn 0.4s ease-in-out forwards; opacity: 0; }
-        
         @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeIn { to { opacity: 1; } }
-
-        select { -webkit-appearance: none; -moz-appearance: none; appearance: none; }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <!-- NAVBAR -->
+    <!-- NAVBAR COM LOGO DINÂMICA -->
     <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 bg-transparent">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center">
-                <!-- Logo: Clicar faz Reset Total -->
-                <div class="flex items-center gap-2 cursor-pointer group" onclick="resetApp()">
-                    <div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center text-white text-xl shadow-lg group-hover:scale-105 transition-transform">
-                        <i class="fa-solid fa-building"></i>
-                    </div>
-                    <span id="logo-text" class="text-2xl font-bold text-white transition-colors duration-300">Lumière</span>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+            
+            <div class="flex items-center gap-2 cursor-pointer group" onclick="resetApp()">
+                <!-- O JS vai injetar aqui a imagem ou o texto -->
+                <div id="nav-logo-container" class="flex items-center gap-2">
+                    <div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center text-white text-xl shadow-lg"><i class="fa-solid fa-building"></i></div>
+                    <span id="logo-text" class="text-2xl font-bold text-white transition-colors duration-300">A Carregar...</span>
                 </div>
+            </div>
 
-                <!-- Links Desktop -->
-                <div class="hidden md:flex space-x-8 items-center">
-                    <a href="#" onclick="resetApp(); return false;" class="nav-link text-white hover:text-brand-500 font-medium transition">Início</a>
-                    <a href="#imoveis" onclick="closeDetails()" class="nav-link text-white hover:text-brand-500 font-medium transition">Imóveis</a>
-                    <a href="#footer" class="nav-link text-white hover:text-brand-500 font-medium transition">Sobre Nós</a>
-                    <button id="nav-contact-btn" onclick="openWhatsApp()" class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-2 rounded-full font-medium transition shadow-lg shadow-brand-500/30 hover:scale-105 flex items-center gap-2">
-                        <i class="fa-brands fa-whatsapp text-lg"></i> <span id="nav-btn-text">Contactar</span>
-                    </button>
-                </div>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#" onclick="resetApp(); return false;" class="nav-link text-white font-medium">Início</a>
+                <button onclick="openWhatsApp()" class="bg-brand-500 hover:bg-brand-600 text-white px-6 py-2 rounded-full font-medium transition shadow-lg">
+                    <i class="fa-brands fa-whatsapp"></i> Contactar
+                </button>
             </div>
         </div>
     </nav>
 
     <main id="app-container" class="flex-grow">
-
-        <!-- ========================================== -->
-        <!-- HOME VIEW (Hero, Filtros e Lista de Imóveis) -->
-        <!-- ========================================== -->
-        <div id="home-view" class="block fade-in">
+        <!-- VISTA INICIAL -->
+        <div id="home-view" class="block">
             
-            <!-- Hero Section -->
+            <!-- CAPA (HERO) DINÂMICA -->
             <header class="relative h-screen min-h-[650px] flex items-center justify-center">
                 <div class="absolute inset-0 z-0">
-                    <img id="hero-bg-img" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" 
-                         alt="Moradia de Luxo" class="w-full h-full object-cover object-center">
+                    <img id="hero-bg-img" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" class="w-full h-full object-cover object-center">
                     <div class="absolute inset-0 hero-gradient z-10"></div>
                 </div>
 
-                <div class="relative z-20 text-center px-4 w-full max-w-6xl mx-auto mt-16" data-aos="zoom-in" data-aos-duration="1000">
-                    <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-lg" id="hero-title">
-                        Encontre o imóvel perfeito<br><span class="text-brand-500" id="hero-subtitle">para o seu estilo de vida.</span>
+                <div class="relative z-20 text-center px-4 w-full max-w-6xl mx-auto mt-16" data-aos="zoom-in">
+                    <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 drop-shadow-lg" id="hero-title">
+                        <span id="hero-t1">Encontre o imóvel</span><br><span class="text-brand-500" id="hero-t2">dos seus sonhos.</span>
                     </h1>
                     
-                    <!-- Barra de Pesquisa e Filtros -->
-                    <div class="glass p-4 rounded-3xl md:rounded-full shadow-2xl mx-auto mt-10 text-left relative z-30">
-                        <form id="search-form" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center" onsubmit="event.preventDefault();">
-                            
+                    <!-- Filtros -->
+                    <div class="glass p-4 rounded-3xl md:rounded-full shadow-2xl mx-auto mt-10 text-left relative z-30 max-w-4xl">
+                        <form id="search-form" class="grid grid-cols-1 md:grid-cols-3 gap-4" onsubmit="event.preventDefault();">
                             <div class="px-4 py-2 border-b md:border-b-0 md:border-r border-gray-200">
-                                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Pesquisa Inteligente</label>
-                                <div class="flex items-center text-gray-700">
-                                    <i class="fa-solid fa-magnifying-glass text-brand-500 mr-2"></i>
-                                    <input type="text" id="searchInput" placeholder="Ex: Parque, Lisboa, T3..." class="w-full bg-transparent outline-none placeholder-gray-400 text-sm md:text-base font-medium">
-                                </div>
+                                <label class="block text-xs font-semibold text-gray-500 uppercase">Pesquisa</label>
+                                <input type="text" id="searchInput" placeholder="Localização, Referência..." class="w-full bg-transparent outline-none mt-1">
                             </div>
-                            
                             <div class="px-4 py-2 border-b md:border-b-0 md:border-r border-gray-200">
-                                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Tipo de Imóvel</label>
-                                <div class="flex items-center text-gray-700">
-                                    <i class="fa-solid fa-house text-brand-500 mr-2"></i>
-                                    <select id="typeInput" class="w-full bg-transparent outline-none text-sm md:text-base font-medium cursor-pointer">
-                                        <option value="">Todos os tipos</option>
-                                        <option value="Apartamento">Apartamento</option>
-                                        <option value="Moradia">Moradia</option>
-                                        <option value="Estúdio">Estúdio</option>
-                                        <option value="Quinta">Quinta</option>
-                                        <option value="Penthouse">Penthouse</option>
-                                    </select>
-                                </div>
+                                <label class="block text-xs font-semibold text-gray-500 uppercase">Tipo</label>
+                                <select id="typeInput" class="w-full bg-transparent outline-none mt-1">
+                                    <option value="">Todos</option>
+                                    <option value="Apartamento">Apartamento</option>
+                                    <option value="Moradia">Moradia</option>
+                                    <option value="Terreno">Terreno</option>
+                                </select>
                             </div>
-
-                            <div class="px-4 py-2 mb-4 md:mb-0">
-                                <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Faixa de Valor</label>
-                                <div class="flex items-center text-gray-700">
-                                    <i class="fa-solid fa-wallet text-brand-500 mr-2"></i>
-                                    <select id="priceInput" class="w-full bg-transparent outline-none text-sm md:text-base font-medium cursor-pointer">
-                                        <option value="all">Qualquer valor</option>
-                                        <option value="0-250000">Até 250.000 €</option>
-                                        <option value="250000-500000">250.000 € a 500.000 €</option>
-                                        <option value="500000-1000000">500.000 € a 1 Milhão €</option>
-                                        <option value="1000000+">Acima de 1 Milhão €</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="px-2">
-                                <button type="button" onclick="scrollToGrid()" class="w-full bg-brand-900 hover:bg-brand-950 text-white h-12 rounded-xl md:rounded-full font-semibold transition flex items-center justify-center gap-2 shadow-lg hover:-translate-y-1">
-                                    <span id="search-btn-text">Ver Resultados</span>
-                                </button>
+                            <div class="px-2 flex items-center">
+                                <button type="button" onclick="scrollToGrid()" class="w-full bg-brand-900 text-white h-12 rounded-full font-semibold shadow-lg">Ver Resultados</button>
                             </div>
                         </form>
                     </div>
@@ -167,126 +90,64 @@
 
             <section id="imoveis" class="py-24 bg-gray-50 min-h-screen relative z-20">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 border-b border-gray-200 pb-4" data-aos="fade-right">
-                        <div>
-                            <h2 class="text-3xl font-bold text-gray-900">Catálogo de Imóveis</h2>
-                            <p class="text-gray-500 mt-2" id="results-count">A carregar...</p>
-                        </div>
-                        <button onclick="resetApp()" class="mt-4 md:mt-0 text-sm text-brand-600 font-medium hover:underline flex items-center gap-2">
-                            <i class="fa-solid fa-rotate-right"></i> Limpar Filtros
-                        </button>
+                    <div class="flex justify-between items-end mb-10 border-b pb-4">
+                        <h2 class="text-3xl font-bold text-gray-900">Catálogo de Imóveis</h2>
+                        <button onclick="resetApp()" class="text-sm text-brand-600 font-medium"><i class="fa-solid fa-rotate-right"></i> Limpar Filtros</button>
                     </div>
 
-                    <!-- Grelha Dinâmica com Ajuste Automático de Layout -->
-                    <div id="properties-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                        <!-- Imóveis injetados via JS Firebase -->
-                    </div>
-
-                    <!-- Estado Vazio (Sem resultados) -->
-                    <div id="empty-state" class="hidden text-center py-20">
-                        <div class="text-6xl text-gray-300 mb-4"><i class="fa-solid fa-house-circle-xmark"></i></div>
-                        <h3 class="text-2xl font-bold text-gray-700 mb-2">Nenhum imóvel encontrado</h3>
-                        <p class="text-gray-500">Tente ajustar os filtros ou os termos de pesquisa.</p>
-                        <button onclick="resetApp()" class="mt-6 text-brand-600 font-semibold hover:underline">Limpar Pesquisa</button>
-                    </div>
-                    
-                    <!-- Botões de Paginação: Ver Mais / Ver Menos -->
-                    <div class="mt-16 flex justify-center gap-4 flex-wrap">
-                        <button id="btn-show-less" onclick="showLess()" class="hidden bg-white border-2 border-gray-300 text-gray-600 hover:bg-gray-100 px-8 py-3 rounded-full font-semibold transition-colors duration-300 shadow-sm">
-                            <i class="fa-solid fa-chevron-up mr-2"></i> Ver menos
-                        </button>
-                        <button id="btn-load-more" onclick="loadMore()" class="hidden bg-white border-2 border-brand-500 text-brand-600 hover:bg-brand-500 hover:text-white px-10 py-3 rounded-full font-semibold transition-colors duration-300 shadow-md">
-                            Ver mais <i class="fa-solid fa-chevron-down ml-2"></i>
-                        </button>
-                    </div>
+                    <div id="properties-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
                 </div>
             </section>
         </div>
 
-        <!-- ========================================== -->
-        <!-- PROPERTY DETAILS VIEW (Subpágina) -->
-        <!-- ========================================== -->
+        <!-- SUB-PÁGINA DO IMÓVEL (COM GALERIA) -->
         <div id="details-view" class="hidden pt-28 pb-20 bg-gray-50 min-h-screen">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 
-                <button onclick="closeDetails()" class="group flex items-center text-gray-600 hover:text-brand-600 font-semibold mb-8 transition-colors bg-white px-5 py-2.5 rounded-full shadow-sm border border-gray-200 w-fit">
-                    <i class="fa-solid fa-arrow-left mr-2 group-hover:-translate-x-1 transition-transform"></i> Voltar aos resultados
+                <button onclick="closeDetails()" class="flex items-center text-gray-600 bg-white px-5 py-2.5 rounded-full shadow-sm border border-gray-200 w-fit mb-8">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> Voltar
                 </button>
-
-                <div class="block lg:hidden mb-4">
-                    <div class="flex gap-2 mb-2" id="detail-badges-mobile"></div>
-                    <h1 id="detail-title-mobile" class="text-2xl font-bold text-gray-900 mb-1">Título</h1>
-                    <p id="detail-location-mobile" class="text-gray-500 text-sm"><i class="fa-solid fa-location-dot text-brand-500 mr-2"></i>Local</p>
-                    <p id="detail-price-mobile" class="text-3xl font-bold text-brand-900 mt-2">0 €</p>
-                </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     <div class="lg:col-span-2">
+                        <!-- Imagem Principal -->
                         <div class="rounded-2xl overflow-hidden shadow-lg bg-white relative">
-                            <img id="detail-main-img" src="" alt="Imagem do imóvel" class="w-full aspect-[4/3] md:aspect-[16/9] object-cover transition-opacity duration-300">
+                            <img id="detail-main-img" src="" class="w-full aspect-[4/3] md:aspect-[16/9] object-cover transition-opacity duration-300">
                         </div>
                         
-                        <div id="detail-thumbnails" class="grid grid-cols-4 gap-2 sm:gap-4 mt-4"></div>
+                        <!-- Galeria Injetada Aqui -->
+                        <div id="detail-thumbnails" class="grid grid-cols-4 md:grid-cols-6 gap-2 sm:gap-4 mt-4"></div>
 
-                        <div class="hidden lg:block mt-8">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    <div class="flex gap-2 mb-3" id="detail-badges"></div>
-                                    <h1 id="detail-title" class="text-3xl font-bold text-gray-900 mb-2">Título</h1>
-                                    <p id="detail-location" class="text-gray-500 text-lg"><i class="fa-solid fa-location-dot text-brand-500 mr-2"></i>Localização</p>
-                                </div>
-                                <div class="text-right">
-                                    <p class="text-sm text-gray-500 uppercase tracking-wider font-semibold mb-1">Valor de Venda</p>
-                                    <p id="detail-price" class="text-4xl font-bold text-brand-900">0 €</p>
-                                </div>
+                        <!-- Título Dinâmico -->
+                        <div class="mt-8 flex justify-between items-start flex-wrap gap-4">
+                            <div>
+                                <h1 id="detail-title" class="text-3xl font-bold text-gray-900 mb-2">Título do Imóvel</h1>
+                                <p id="detail-location" class="text-gray-500 text-lg"><i class="fa-solid fa-location-dot text-brand-500 mr-2"></i>Local</p>
                             </div>
+                            <p id="detail-price" class="text-4xl font-bold text-brand-900">0 €</p>
                         </div>
 
-                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-8">
-                            <h3 class="text-xl font-bold text-gray-900 mb-6 border-b border-gray-100 pb-4">Especificações</h3>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                                <div>
-                                    <p class="text-gray-400 text-xs uppercase font-bold tracking-wider mb-1">Quartos</p>
-                                    <p id="spec-beds" class="font-semibold text-lg text-gray-800 flex items-center gap-2"><i class="fa-solid fa-bed text-brand-500"></i> 0</p>
-                                </div>
-                                <div>
-                                    <p class="text-gray-400 text-xs uppercase font-bold tracking-wider mb-1">Casas de Banho</p>
-                                    <p id="spec-baths" class="font-semibold text-lg text-gray-800 flex items-center gap-2"><i class="fa-solid fa-bath text-brand-500"></i> 0</p>
-                                </div>
-                                <div>
-                                    <p class="text-gray-400 text-xs uppercase font-bold tracking-wider mb-1">Área Bruta</p>
-                                    <p id="spec-area" class="font-semibold text-lg text-gray-800 flex items-center gap-2"><i class="fa-solid fa-ruler-combined text-brand-500"></i> 0 m²</p>
-                                </div>
-                                <div>
-                                    <p class="text-gray-400 text-xs uppercase font-bold tracking-wider mb-1">Ano</p>
-                                    <p id="spec-year" class="font-semibold text-lg text-gray-800 flex items-center gap-2"><i class="fa-solid fa-calendar-alt text-brand-500"></i> 2000</p>
-                                </div>
-                            </div>
+                        <!-- Características Dinâmicas -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-8 grid grid-cols-2 md:grid-cols-4 gap-6">
+                            <div><p class="text-gray-400 text-xs uppercase mb-1">Quartos</p><p id="spec-beds" class="font-bold text-lg"><i class="fa-solid fa-bed text-brand-500"></i> 0</p></div>
+                            <div><p class="text-gray-400 text-xs uppercase mb-1">WC</p><p id="spec-baths" class="font-bold text-lg"><i class="fa-solid fa-bath text-brand-500"></i> 0</p></div>
+                            <div><p class="text-gray-400 text-xs uppercase mb-1">Área</p><p id="spec-area" class="font-bold text-lg"><i class="fa-solid fa-ruler-combined text-brand-500"></i> 0 m²</p></div>
+                            <div><p class="text-gray-400 text-xs uppercase mb-1">Ano</p><p id="spec-year" class="font-bold text-lg"><i class="fa-solid fa-calendar text-brand-500"></i> 2024</p></div>
                         </div>
 
+                        <!-- Descrição Dinâmica -->
                         <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-8">
                             <h3 class="text-xl font-bold text-gray-900 mb-4">Descrição</h3>
-                            <div id="detail-description" class="text-gray-600 space-y-4 leading-relaxed text-justify"></div>
+                            <div id="detail-description" class="text-gray-600 space-y-4 leading-relaxed text-justify whitespace-pre-line"></div>
                         </div>
                     </div>
 
                     <div class="lg:col-span-1">
                         <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 sticky top-28">
-                            <div class="flex items-center gap-4 border-b border-gray-100 pb-6 mb-6">
-                                <div class="w-16 h-16 bg-brand-100 rounded-full flex items-center justify-center text-brand-600 text-2xl font-bold" id="agency-initial">
-                                    L
-                                </div>
-                                <div>
-                                    <p class="font-bold text-gray-900" id="agency-name">Lumière Agency</p>
-                                    <p class="text-sm text-gray-500">Acompanhamento personalizado.</p>
-                                </div>
-                            </div>
-                            
                             <h4 class="font-bold text-gray-800 mb-4">Falar com Consultor</h4>
-                            <p class="text-sm text-gray-500 mb-6">Entre em contacto direto via WhatsApp para obter mais informações ou agendar uma visita presencial.</p>
-                            <button type="button" onclick="openWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-3.5 rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30">
-                                <i class="fa-brands fa-whatsapp text-xl"></i> Contactar via WhatsApp
+                            <p class="text-sm text-gray-500 mb-6">Entre em contacto direto para mais informações.</p>
+                            <button onclick="openWhatsApp()" class="w-full bg-emerald-600 text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-xl"></i> WhatsApp
                             </button>
                         </div>
                     </div>
@@ -295,365 +156,190 @@
         </div>
     </main>
 
-    <!-- FOOTER -->
+    <!-- RODAPÉ DINÂMICO -->
     <footer id="footer" class="bg-gray-900 text-white pt-16 pb-8 border-t border-gray-800 relative z-30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
                 <div>
-                    <div class="flex items-center gap-2 mb-6">
-                        <div class="w-8 h-8 bg-brand-500 rounded flex items-center justify-center text-white text-sm shadow-lg">
-                            <i class="fa-solid fa-building"></i>
-                        </div>
-                        <span class="text-2xl font-bold text-white" id="footer-logo-text">Lumière</span>
-                    </div>
-                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                        Especialistas em propriedades de luxo e investimentos imobiliários. Encontramos a casa dos seus sonhos com um serviço de excelência.
-                    </p>
+                    <!-- Logo no Rodapé -->
+                    <div id="footer-logo-container" class="mb-4"></div>
+                    <p id="footer-desc" class="text-gray-400 text-sm leading-relaxed mb-6">A sua imobiliária de confiança.</p>
                 </div>
-
-                <div>
-                    <h3 class="text-lg font-bold mb-6 text-white border-b border-gray-700 pb-2 inline-block">Links Úteis</h3>
-                    <ul class="space-y-3 text-sm">
-                        <li><a href="#" onclick="resetApp(); return false;" class="text-gray-400 hover:text-brand-500 transition-colors"><i class="fa-solid fa-chevron-right text-xs mr-2 text-brand-500"></i>Página Inicial</a></li>
-                        <li><a href="#imoveis" class="text-gray-400 hover:text-brand-500 transition-colors"><i class="fa-solid fa-chevron-right text-xs mr-2 text-brand-500"></i>Catálogo de Imóveis</a></li>
-                    </ul>
-                </div>
-
                 <div>
                     <h3 class="text-lg font-bold mb-6 text-white border-b border-gray-700 pb-2 inline-block">Contactos</h3>
-                    <ul class="space-y-4 text-sm">
-                        <li class="flex items-center">
-                            <i class="fa-brands fa-whatsapp text-emerald-500 mr-3 text-lg"></i>
-                            <span class="text-gray-400" id="footer-phone">+351 912 345 678</span>
-                        </li>
-                    </ul>
+                    <p class="flex items-center text-gray-400"><i class="fa-brands fa-whatsapp text-emerald-500 mr-3"></i> <span id="footer-phone">+351 000 000 000</span></p>
                 </div>
-            </div>
-            
-            <div class="border-t border-gray-800 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
-                <p>&copy; 2026 <span id="footer-copyright-name">Lumière Imobiliária</span>. Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Script de Inicialização AOS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-
-    <!-- SCRIPTS FIREBASE + LÓGICA DO SITE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, onSnapshot, setDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Configuração do Firebase fornecida pelo utilizador
-        const firebaseConfig = {
+        const app = initializeApp({
             apiKey: "AIzaSyCx8OyFbqjgaJ8SUs1xfMuK8Tbeg6MklJY",
             authDomain: "alojamento-c4f0a.firebaseapp.com",
-            projectId: "alojamento-c4f0a",
-            storageBucket: "alojamento-c4f0a.firebasestorage.app",
-            messagingSenderId: "650640192233",
-            appId: "1:650640192233:web:c09f5d56c13617f1207678"
-        };
-
-        // Inicializar Firebase
-        const app = initializeApp(firebaseConfig);
+            projectId: "alojamento-c4f0a"
+        });
         const db = getFirestore(app);
 
-        // Formatação em Euros
-        const currencyFormatter = new Intl.NumberFormat('pt-PT', {
-            style: 'currency',
-            currency: 'EUR',
-            maximumFractionDigits: 0
-        });
-
-        // Configurações Padrão
-        let siteConfig = {
-            brandName: "Lumière",
-            heroTitle: "Encontre o imóvel perfeito",
-            heroSubtitle: "para o seu estilo de vida.",
-            whatsapp: "351912345678",
-            btnContactText: "Contactar"
-        };
-
-        // Imóveis do Sistema
+        let siteConfig = { brandName: "Imobiliária", whatsapp: "351912345678" };
         let allProperties = [];
         let filteredProperties = [];
-        const PAGE_SIZE = 8;
-        let visibleCount = PAGE_SIZE;
 
-        // --- SINCRONIZAÇÃO EM TEMPO REAL ---
-        
-        // 1. Configurações do Site
+        // 1. SINCRONIZAR VISUAL E TEXTOS (LOGO, CAPA E RODAPÉ)
         onSnapshot(doc(db, "settings", "general"), (docSnap) => {
             if (docSnap.exists()) {
                 siteConfig = { ...siteConfig, ...docSnap.data() };
-                updateSiteUI();
-            } else {
-                // Criar ficheiro padrão no Firebase se ainda não existir
-                setDoc(doc(db, "settings", "general"), siteConfig);
+                
+                // Textos
+                document.getElementById('page-title').innerText = siteConfig.brandName;
+                document.getElementById('hero-t1').innerText = siteConfig.heroTitle || "Encontre o imóvel";
+                document.getElementById('hero-t2').innerText = siteConfig.heroSubtitle || "perfeito para si.";
+                document.getElementById('footer-desc').innerText = siteConfig.footerText || "A sua imobiliária de confiança.";
+                document.getElementById('footer-phone').innerText = "+" + siteConfig.whatsapp;
+
+                // Logo Dinâmica
+                const navLogo = document.getElementById('nav-logo-container');
+                const footLogo = document.getElementById('footer-logo-container');
+                if (siteConfig.logoBase64) {
+                    navLogo.innerHTML = `<img src="${siteConfig.logoBase64}" class="h-10 object-contain">`;
+                    footLogo.innerHTML = `<img src="${siteConfig.logoBase64}" class="h-12 object-contain bg-white/10 p-1 rounded">`;
+                } else {
+                    navLogo.innerHTML = `<div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center text-white text-xl"><i class="fa-solid fa-building"></i></div><span class="text-2xl font-bold text-white transition-colors duration-300 logo-text-nav">${siteConfig.brandName}</span>`;
+                    footLogo.innerHTML = `<span class="text-2xl font-bold text-white">${siteConfig.brandName}</span>`;
+                }
+
+                // Imagem de Capa (Hero)
+                if (siteConfig.heroImageBase64) {
+                    document.getElementById('hero-bg-img').src = siteConfig.heroImageBase64;
+                }
             }
         });
 
-        // 2. Coleção de Imóveis
-        onSnapshot(doc(db, "settings", "catalog"), (docSnap) => {
-            if (docSnap.exists() && docSnap.data().items) {
-                allProperties = docSnap.data().items;
-            } else {
-                // Inserir dados padrão caso esteja vazio
-                allProperties = getDefaultProperties();
-                setDoc(doc(db, "settings", "catalog"), { items: allProperties });
-            }
+        // 2. SINCRONIZAR IMÓVEIS (COLEÇÃO)
+        onSnapshot(collection(db, "properties"), (snapshot) => {
+            allProperties = snapshot.docs.map(doc => ({ fb_id: doc.id, ...doc.data() }));
             applyFilters();
         });
 
-        function updateSiteUI() {
-            document.getElementById('logo-text').innerText = siteConfig.brandName || "Lumière";
-            document.getElementById('footer-logo-text').innerText = siteConfig.brandName || "Lumière";
-            document.getElementById('agency-name').innerText = (siteConfig.brandName || "Lumière") + " Agency";
-            document.getElementById('agency-initial').innerText = (siteConfig.brandName || "L")[0];
-            document.getElementById('page-title').innerText = `${siteConfig.brandName || "Lumière"} | Imóveis em Portugal`;
-            document.getElementById('nav-btn-text').innerText = siteConfig.btnContactText || "Contactar";
-            document.getElementById('hero-title').innerHTML = `${siteConfig.heroTitle || 'Encontre o imóvel perfeito'}<br><span class="text-brand-500">${siteConfig.heroSubtitle || 'para o seu estilo de vida.'}</span>`;
-            document.getElementById('footer-phone').innerText = siteConfig.whatsapp ? `+${siteConfig.whatsapp}` : "+351 912 345 678";
-        }
-
+        // WhatsApp
         window.openWhatsApp = function() {
-            const phone = (siteConfig.whatsapp || "351912345678").replace(/\D/g, '');
-            const msg = encodeURIComponent(`Olá! Gostaria de obter mais informações sobre os imóveis no site da ${siteConfig.brandName || 'Lumière'}.`);
-            window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+            window.open(`https://wa.me/${siteConfig.whatsapp.replace(/\D/g, '')}?text=Olá! Gostaria de informações.`, '_blank');
         };
 
-        const normalizeText = (text) => text ? text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
-
-        window.resetApp = function() {
-            closeDetails();
-            document.getElementById('searchInput').value = "";
-            document.getElementById('typeInput').value = "";
-            document.getElementById('priceInput').value = "all";
-            filteredProperties = [...allProperties];
-            visibleCount = PAGE_SIZE;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            renderProperties();
-        };
-
+        // Pesquisa
         function applyFilters() {
-            const searchRaw = document.getElementById('searchInput').value;
-            const searchTerms = normalizeText(searchRaw).split(' ').filter(t => t.length > 0);
-            
-            const typeFilter = document.getElementById('typeInput').value;
-            const priceFilter = document.getElementById('priceInput').value;
-
-            filteredProperties = allProperties.filter(prop => {
-                const searchableText = normalizeText(`${prop.title} ${prop.location} ${prop.description} ${prop.type}`);
-                const matchesText = searchTerms.length === 0 || searchTerms.every(term => searchableText.includes(term));
-                const matchesType = typeFilter === "" || prop.type === typeFilter;
-
-                let matchesPrice = true;
-                if (priceFilter !== "all") {
-                    if (priceFilter === "0-250000") matchesPrice = prop.price <= 250000;
-                    else if (priceFilter === "250000-500000") matchesPrice = prop.price > 250000 && prop.price <= 500000;
-                    else if (priceFilter === "500000-1000000") matchesPrice = prop.price > 500000 && prop.price <= 1000000;
-                    else if (priceFilter === "1000000+") matchesPrice = prop.price > 1000000;
-                }
-
-                return matchesText && matchesType && matchesPrice;
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const type = document.getElementById('typeInput').value;
+            filteredProperties = allProperties.filter(p => {
+                return (!type || p.type === type) && (!search || p.title.toLowerCase().includes(search) || p.location.toLowerCase().includes(search));
             });
-
-            visibleCount = PAGE_SIZE;
             renderProperties();
         }
-
-        window.loadMore = function() { visibleCount += PAGE_SIZE; renderProperties(); };
-        window.showLess = function() { visibleCount = PAGE_SIZE; renderProperties(); scrollToGrid(); };
-        window.scrollToGrid = function() { document.getElementById('imoveis').scrollIntoView({ behavior: 'smooth' }); };
-
         document.getElementById('searchInput').addEventListener('input', applyFilters);
         document.getElementById('typeInput').addEventListener('change', applyFilters);
-        document.getElementById('priceInput').addEventListener('change', applyFilters);
 
-        // --- RENDERIZAÇÃO DA GRELHA ---
+        // Renderizar Grelha
         function renderProperties() {
             const grid = document.getElementById('properties-grid');
-            const emptyState = document.getElementById('empty-state');
-            const btnLoadMore = document.getElementById('btn-load-more');
-            const btnShowLess = document.getElementById('btn-show-less');
-            const resultsCount = document.getElementById('results-count');
-
             grid.innerHTML = '';
-            
-            const showingCount = Math.min(visibleCount, filteredProperties.length);
-            resultsCount.innerText = `A mostrar ${showingCount} de ${filteredProperties.length} imóveis`;
-
-            if (filteredProperties.length === 0) {
-                grid.classList.add('hidden');
-                emptyState.classList.remove('hidden');
-                btnLoadMore.classList.add('hidden');
-                btnShowLess.classList.add('hidden');
-                return;
-            } else {
-                grid.classList.remove('hidden');
-                emptyState.classList.add('hidden');
-            }
-
-            // --- REGLA DE AJUSTE INTELIGENTE DE LAYOUT ---
-            if (filteredProperties.length === 1) {
-                grid.className = "grid grid-cols-1 max-w-md mx-auto gap-8";
-            } else if (filteredProperties.length === 2) {
-                grid.className = "grid grid-cols-1 md:grid-cols-2 max-w-3xl mx-auto gap-8";
-            } else {
-                grid.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8";
-            }
-
-            const visibleProperties = filteredProperties.slice(0, visibleCount);
-
-            visibleProperties.forEach((prop, index) => {
-                const typeIcon = prop.type === 'Moradia' || prop.type === 'Quinta' ? 'fa-house-chimney' : 'fa-building';
-                
-                const card = document.createElement('div');
-                card.className = "group cursor-pointer bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 fade-in-up";
-                card.style.animationDelay = `${(index % PAGE_SIZE) * 50}ms`;
-                card.onclick = () => openDetails(prop.id);
-                
-                card.innerHTML = `
-                    <div class="relative h-64 overflow-hidden">
-                        <div class="absolute top-4 left-4 z-10">
-                            <span class="bg-brand-500 text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wide shadow-md">Venda</span>
+            filteredProperties.forEach((prop, index) => {
+                grid.innerHTML += `
+                    <div class="group cursor-pointer bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all hover:-translate-y-2 border border-gray-100 fade-in-up" onclick="openDetails('${prop.fb_id}')">
+                        <div class="relative h-64 overflow-hidden">
+                            <img src="${prop.mainImage}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         </div>
-                        <img src="${prop.mainImage}" alt="${prop.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out">
-                        <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/80 to-transparent">
-                            <p class="text-white font-medium text-sm drop-shadow-md"><i class="fa-solid ${typeIcon} mr-2"></i>${prop.type}</p>
-                        </div>
-                    </div>
-                    <div class="p-6">
-                        <p class="text-2xl font-bold text-brand-900 mb-2">${currencyFormatter.format(prop.price)}</p>
-                        <h3 class="text-lg font-bold text-gray-800 mb-2 line-clamp-1 group-hover:text-brand-500 transition-colors">${prop.title}</h3>
-                        <p class="text-gray-500 text-sm mb-4 truncate"><i class="fa-solid fa-location-dot text-brand-500 mr-2"></i>${prop.location}</p>
-                        <div class="flex justify-between items-center pt-4 border-t border-gray-100 text-gray-600 text-sm font-medium">
-                            <div title="Quartos"><i class="fa-solid fa-bed text-brand-500/50 mr-1"></i> ${prop.beds}</div>
-                            <div title="Casas de Banho"><i class="fa-solid fa-bath text-brand-500/50 mr-1"></i> ${prop.baths}</div>
-                            <div title="Área"><i class="fa-solid fa-ruler-combined text-brand-500/50 mr-1"></i> ${prop.area}m²</div>
+                        <div class="p-6">
+                            <p class="text-2xl font-bold text-brand-900 mb-2">${prop.price.toLocaleString('pt-PT')} €</p>
+                            <h3 class="text-lg font-bold text-gray-800 mb-2 truncate">${prop.title}</h3>
+                            <p class="text-gray-500 text-sm mb-4 truncate"><i class="fa-solid fa-location-dot text-brand-500 mr-2"></i>${prop.location}</p>
+                            <div class="flex justify-between border-t border-gray-100 pt-4 text-gray-600 text-sm font-medium">
+                                <div><i class="fa-solid fa-bed text-brand-500 mr-1"></i> ${prop.beds}</div>
+                                <div><i class="fa-solid fa-bath text-brand-500 mr-1"></i> ${prop.baths}</div>
+                                <div><i class="fa-solid fa-ruler text-brand-500 mr-1"></i> ${prop.area}m²</div>
+                            </div>
                         </div>
                     </div>
                 `;
-                grid.appendChild(card);
             });
-
-            if (filteredProperties.length > visibleCount) {
-                btnLoadMore.classList.remove('hidden');
-            } else {
-                btnLoadMore.classList.add('hidden');
-            }
-
-            if (visibleCount > PAGE_SIZE) {
-                btnShowLess.classList.remove('hidden');
-            } else {
-                btnShowLess.classList.add('hidden');
-            }
         }
 
-        // --- SUBPÁGINA DE DETALHES ---
-        const homeView = document.getElementById('home-view');
-        const detailsView = document.getElementById('details-view');
-
-        window.openDetails = function(id) {
-            const prop = allProperties.find(p => p.id === id);
+        // ABRIR DETALHES COM GALERIA DE IMAGENS
+        window.openDetails = function(fb_id) {
+            const prop = allProperties.find(p => p.fb_id === fb_id);
             if (!prop) return;
 
             document.getElementById('detail-title').innerText = prop.title;
-            document.getElementById('detail-title-mobile').innerText = prop.title;
-            document.getElementById('detail-price').innerText = currencyFormatter.format(prop.price);
-            document.getElementById('detail-price-mobile').innerText = currencyFormatter.format(prop.price);
+            document.getElementById('detail-price').innerText = prop.price.toLocaleString('pt-PT') + " €";
+            document.getElementById('detail-location').innerHTML = `<i class="fa-solid fa-location-dot text-brand-500 mr-2"></i>${prop.location}`;
             
-            const locHTML = `<i class="fa-solid fa-location-dot text-brand-500 mr-2"></i>${prop.location}`;
-            document.getElementById('detail-location').innerHTML = locHTML;
-            document.getElementById('detail-location-mobile').innerHTML = locHTML;
-
-            const badgeHTML = `
-                <span class="bg-brand-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Venda</span>
-                <span class="bg-gray-200 text-gray-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">${prop.type}</span>
-            `;
-            document.getElementById('detail-badges').innerHTML = badgeHTML;
-            document.getElementById('detail-badges-mobile').innerHTML = badgeHTML;
-
-            document.getElementById('spec-beds').innerHTML = `<i class="fa-solid fa-bed text-brand-500"></i> ${prop.beds}`;
-            document.getElementById('spec-baths').innerHTML = `<i class="fa-solid fa-bath text-brand-500"></i> ${prop.baths}`;
-            document.getElementById('spec-area').innerHTML = `<i class="fa-solid fa-ruler-combined text-brand-500"></i> ${prop.area} m²`;
-            document.getElementById('spec-year').innerHTML = `<i class="fa-solid fa-calendar-alt text-brand-500"></i> ${prop.year || '2023'}`;
-
+            // Características
+            document.getElementById('spec-beds').innerHTML = `<i class="fa-solid fa-bed text-brand-500 mr-2"></i>${prop.beds}`;
+            document.getElementById('spec-baths').innerHTML = `<i class="fa-solid fa-bath text-brand-500 mr-2"></i>${prop.baths}`;
+            document.getElementById('spec-area').innerHTML = `<i class="fa-solid fa-ruler-combined text-brand-500 mr-2"></i>${prop.area} m²`;
+            document.getElementById('spec-year').innerHTML = `<i class="fa-solid fa-calendar text-brand-500 mr-2"></i>${prop.year}`;
+            
+            // Descrição (preservando quebras de linha)
             document.getElementById('detail-description').innerText = prop.description;
 
+            // Galeria de Imagens
             const mainImg = document.getElementById('detail-main-img');
             mainImg.src = prop.mainImage;
-            const thumbsContainer = document.getElementById('detail-thumbnails');
-            thumbsContainer.innerHTML = '';
-            const allImages = [prop.mainImage, ...(prop.images || [])];
-            allImages.forEach((imgUrl) => {
+            
+            const thumbs = document.getElementById('detail-thumbnails');
+            thumbs.innerHTML = '';
+            
+            // Junta a imagem principal com a galeria (se existir)
+            const allImages = [prop.mainImage, ...(prop.gallery || [])];
+            
+            allImages.forEach(imgUrl => {
                 const thumb = document.createElement('div');
-                thumb.className = "cursor-pointer rounded-lg overflow-hidden border-2 border-transparent hover:border-brand-500 transition-colors h-20 sm:h-28";
+                thumb.className = "cursor-pointer rounded-lg overflow-hidden border-2 border-transparent hover:border-brand-500 transition-colors h-16 sm:h-24";
                 thumb.onclick = () => {
                     mainImg.style.opacity = 0.5;
                     setTimeout(() => { mainImg.src = imgUrl; mainImg.style.opacity = 1; }, 150);
                 };
                 thumb.innerHTML = `<img src="${imgUrl}" class="w-full h-full object-cover">`;
-                thumbsContainer.appendChild(thumb);
+                thumbs.appendChild(thumb);
             });
 
-            homeView.classList.add('hidden');
-            detailsView.classList.remove('hidden');
-            detailsView.classList.add('fade-in');
-            window.scrollTo({ top: 0, behavior: 'instant' });
-            updateNavbarStyle(true);
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('details-view').classList.remove('hidden');
+            window.scrollTo(0, 0);
+            updateNav(true);
         };
 
         window.closeDetails = function() {
-            if (!detailsView.classList.contains('hidden')) {
-                detailsView.classList.add('hidden');
-                homeView.classList.remove('hidden');
-                updateNavbarStyle(false);
-                setTimeout(() => { document.getElementById('imoveis').scrollIntoView({ behavior: 'instant' }); }, 10);
-            }
+            document.getElementById('details-view').classList.add('hidden');
+            document.getElementById('home-view').classList.remove('hidden');
+            updateNav(false);
+            window.scrollTo(0, document.getElementById('imoveis').offsetTop - 50);
         };
 
-        function updateNavbarStyle(forceWhite = false) {
+        window.resetApp = function() { closeDetails(); document.getElementById('searchInput').value=''; applyFilters(); window.scrollTo(0,0); };
+        window.scrollToGrid = function() { document.getElementById('imoveis').scrollIntoView(); };
+
+        function updateNav(forceWhite) {
             const nav = document.getElementById('navbar');
-            const logo = document.getElementById('logo-text');
             const links = document.querySelectorAll('.nav-link');
+            const logoTexts = document.querySelectorAll('.logo-text-nav');
 
             if (forceWhite || window.scrollY > 50) {
                 nav.classList.add('bg-white', 'shadow-md');
-                logo.classList.replace('text-white', 'text-brand-900');
                 links.forEach(l => l.classList.replace('text-white', 'text-gray-700'));
+                logoTexts.forEach(l => l.classList.replace('text-white', 'text-brand-900'));
             } else {
                 nav.classList.remove('bg-white', 'shadow-md');
-                logo.classList.replace('text-brand-900', 'text-white');
                 links.forEach(l => l.classList.replace('text-gray-700', 'text-white'));
+                logoTexts.forEach(l => l.classList.replace('text-brand-900', 'text-white'));
             }
         }
+        window.addEventListener('scroll', () => { if(document.getElementById('details-view').classList.contains('hidden')) updateNav(); });
 
-        window.addEventListener('scroll', () => {
-            if (!detailsView.classList.contains('hidden')) return;
-            updateNavbarStyle();
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            AOS.init({ once: true, offset: 100 });
-        });
-
-        function getDefaultProperties() {
-            return [
-                {
-                    id: 1, title: "Apartamento T3 de Luxo", price: 850000, location: "Parque das Nações, Lisboa", type: "Apartamento", beds: 3, baths: 3, area: 165, year: 2021,
-                    mainImage: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                    images: ["https://images.unsplash.com/photo-1502672260266-1c1e52d377b2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"],
-                    description: "Fantástico apartamento no Parque das Nações com vista desafogada para o rio Tejo."
-                },
-                {
-                    id: 2, title: "Moradia Contemporânea com Piscina", price: 1250000, location: "Cascais, Lisboa", type: "Moradia", beds: 4, baths: 5, area: 320, year: 2023,
-                    mainImage: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-                    images: ["https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"],
-                    description: "Moradia isolada de arquitetura contemporânea em Cascais. Equipada com piscina infinita."
-                }
-            ];
-        }
+        AOS.init();
     </script>
 </body>
 </html>

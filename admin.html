@@ -3,22 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Gestão | Lumière Admin</title>
-    
-    <!-- Tailwind CSS -->
+    <title>Painel de Gestão Completo | Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #f1f5f9; }
-    </style>
+    <style>body { font-family: 'Poppins', sans-serif; background-color: #f1f5f9; }</style>
 </head>
 <body class="min-h-screen pb-20">
 
-    <!-- Header do Painel -->
     <header class="bg-slate-900 text-white py-6 px-8 shadow-md">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
@@ -26,8 +18,8 @@
                     <i class="fa-solid fa-sliders"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-bold">Painel de Controlo em Tempo Real</h1>
-                    <p class="text-xs text-slate-400">Gerencie todos os textos, contactos e imóveis do site</p>
+                    <h1 class="text-xl font-bold">Painel de Controlo Total</h1>
+                    <p class="text-xs text-slate-400">Gerencie Capa, Logo, Rodapé e Imóveis com Galeria</p>
                 </div>
             </div>
             <a href="index.html" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-4 py-2 rounded-lg text-sm font-medium transition flex items-center gap-2">
@@ -38,55 +30,67 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
         
-        <!-- COLUNA 1: CONFIGURAÇÕES DO SITE -->
+        <!-- COLUNA 1: CONFIGURAÇÕES GERAIS DO SITE -->
         <div class="lg:col-span-1 space-y-6">
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
                 <h2 class="text-lg font-bold text-slate-800 mb-4 border-b pb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-gear text-sky-500"></i> Definições do Site
+                    <i class="fa-solid fa-palette text-sky-500"></i> Aparência e Textos
                 </h2>
 
                 <form id="site-settings-form" class="space-y-4">
+                    <!-- LOGO -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Nome da Empresa / Marca</label>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Logo do Site (PNG/JPG)</label>
+                        <input type="file" id="cfg-logo-file" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-sky-50 file:text-sky-700 cursor-pointer">
+                        <img id="cfg-logo-preview" class="mt-2 h-12 object-contain hidden border rounded p-1">
+                        <input type="hidden" id="cfg-logo-base64">
+                    </div>
+
+                    <!-- CAPA -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Imagem de Capa (Fundo Inicial)</label>
+                        <input type="file" id="cfg-hero-file" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-sky-50 file:text-sky-700 cursor-pointer">
+                        <img id="cfg-hero-preview" class="mt-2 h-20 w-full object-cover hidden border rounded p-1">
+                        <input type="hidden" id="cfg-hero-base64">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Nome da Empresa</label>
                         <input type="text" id="cfg-brand" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
                     </div>
-
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Título do Hero (Banner)</label>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Título Inicial</label>
                         <input type="text" id="cfg-hero-title" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
                     </div>
-
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Subtítulo do Hero</label>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Subtítulo Inicial</label>
                         <input type="text" id="cfg-hero-subtitle" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
                     </div>
-
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Texto do Botão de Contacto</label>
-                        <input type="text" id="cfg-btn-text" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">WhatsApp (com 351)</label>
+                        <input type="text" id="cfg-whatsapp" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
                     </div>
-
+                    
+                    <!-- RODAPÉ -->
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Número de WhatsApp (Portugal)</label>
-                        <input type="text" id="cfg-whatsapp" placeholder="Ex: 351912345678" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
-                        <p class="text-[11px] text-slate-400 mt-1">Inclua o código 351 antes do número de telefone.</p>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Texto de Descrição (Rodapé)</label>
+                        <textarea id="cfg-footer-desc" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500 resize-none"></textarea>
                     </div>
 
                     <button type="submit" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2.5 rounded-lg text-sm transition shadow-md">
-                        Guardar Alterações
+                        Guardar Configurações Visuais
                     </button>
                 </form>
             </div>
         </div>
 
-        <!-- COLUNA 2 & 3: GESTÃO DE IMÓVEIS -->
+        <!-- COLUNA 2 & 3: GESTÃO DE IMÓVEIS E GALERIA -->
         <div class="lg:col-span-2 space-y-6">
             
-            <!-- Formulário Adicionar / Editar Imóvel -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
                 <div class="flex justify-between items-center mb-4 border-b pb-3">
                     <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2" id="form-title">
-                        <i class="fa-solid fa-plus text-emerald-500"></i> Adicionar Novo Imóvel
+                        <i class="fa-solid fa-house-medical text-emerald-500"></i> Adicionar/Editar Imóvel
                     </h2>
                     <button type="button" id="btn-cancel-edit" onclick="resetPropertyForm()" class="hidden text-xs text-rose-600 font-bold hover:underline">
                         Cancelar Edição
@@ -98,28 +102,25 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Título do Imóvel</label>
-                            <input type="text" id="prop-title" required placeholder="Ex: Moradia Vista Mar" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Título na Sub-página</label>
+                            <input type="text" id="prop-title" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Preço (€ Euros)</label>
-                            <input type="number" id="prop-price" required placeholder="Ex: 450000" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Preço (€)</label>
+                            <input type="number" id="prop-price" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
                         </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Localização</label>
-                            <input type="text" id="prop-location" required placeholder="Ex: Cascais, Lisboa" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
+                            <input type="text" id="prop-location" required class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Tipo de Imóvel</label>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Tipo</label>
                             <select id="prop-type" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
                                 <option value="Apartamento">Apartamento</option>
                                 <option value="Moradia">Moradia</option>
                                 <option value="Estúdio">Estúdio</option>
                                 <option value="Quinta">Quinta</option>
-                                <option value="Penthouse">Penthouse</option>
+                                <option value="Terreno">Terreno</option>
                             </select>
                         </div>
                     </div>
@@ -127,62 +128,61 @@
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Quartos</label>
-                            <input type="number" id="prop-beds" value="2" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
+                            <input type="number" id="prop-beds" value="0" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">WC</label>
-                            <input type="number" id="prop-baths" value="2" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Casas de Banho</label>
+                            <input type="number" id="prop-baths" value="0" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Área (m²)</label>
-                            <input type="number" id="prop-area" value="120" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
+                            <input type="number" id="prop-area" value="0" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Ano</label>
-                            <input type="number" id="prop-year" value="2023" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
+                            <input type="number" id="prop-year" value="2024" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Descrição do Imóvel</label>
-                        <textarea id="prop-desc" rows="3" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500 resize-none"></textarea>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Descrição Completa</label>
+                        <textarea id="prop-desc" rows="4" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500 resize-none"></textarea>
                     </div>
 
-                    <!-- Upload de Imagem com Redimensionamento Automático para Base64 -->
-                    <div>
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Imagem Principal (Carregar do Computador)</label>
-                        <input type="file" id="prop-image-file" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 cursor-pointer">
-                        <input type="hidden" id="prop-main-image-base64">
-                        <div id="image-preview-container" class="mt-2 hidden">
-                            <img id="image-preview" src="" class="h-24 w-40 object-cover rounded-lg border">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-t pt-4">
+                        <!-- IMAGEM PRINCIPAL -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Imagem Principal (Capa do Imóvel)</label>
+                            <input type="file" id="prop-main-image" accept="image/*" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-sky-50 file:text-sky-700 cursor-pointer">
+                            <input type="hidden" id="prop-main-base64">
+                            <img id="prop-main-preview" class="mt-2 h-24 w-full object-cover hidden border rounded">
+                        </div>
+                        
+                        <!-- GALERIA DE IMAGENS -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Galeria (Selecionar várias)</label>
+                            <input type="file" id="prop-gallery-images" accept="image/*" multiple class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-sky-50 file:text-sky-700 cursor-pointer">
+                            <div id="prop-gallery-preview" class="mt-2 grid grid-cols-3 gap-2"></div>
                         </div>
                     </div>
 
-                    <button type="submit" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 rounded-lg text-sm transition shadow-md flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-floppy-disk"></i> Guardar Imóvel no Firebase
+                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-lg text-sm transition shadow-md flex items-center justify-center gap-2 mt-4">
+                        <i class="fa-solid fa-floppy-disk"></i> Guardar Imóvel
                     </button>
                 </form>
             </div>
 
-            <!-- Lista de Imóveis Cadastrados -->
+            <!-- Lista -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-                <h2 class="text-lg font-bold text-slate-800 mb-4 border-b pb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-list text-indigo-500"></i> Imóveis Atuais
-                </h2>
-
-                <div id="admin-properties-list" class="space-y-4">
-                    <!-- Injetado via JS -->
-                </div>
+                <h2 class="text-lg font-bold text-slate-800 mb-4 border-b pb-3"><i class="fa-solid fa-list text-indigo-500"></i> Imóveis Publicados</h2>
+                <div id="admin-properties-list" class="space-y-4"></div>
             </div>
-
         </div>
-
     </div>
 
-    <!-- SCRIPT FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, onSnapshot, setDoc, collection, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCx8OyFbqjgaJ8SUs1xfMuK8Tbeg6MklJY",
@@ -195,45 +195,11 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-
         let catalogList = [];
+        let currentGalleryBase64 = []; // Guarda as imagens da galeria
 
-        // 1. Ouvir Definições
-        onSnapshot(doc(db, "settings", "general"), (docSnap) => {
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                document.getElementById('cfg-brand').value = data.brandName || "Lumière";
-                document.getElementById('cfg-hero-title').value = data.heroTitle || "";
-                document.getElementById('cfg-hero-subtitle').value = data.heroSubtitle || "";
-                document.getElementById('cfg-btn-text').value = data.btnContactText || "Contactar";
-                document.getElementById('cfg-whatsapp').value = data.whatsapp || "";
-            }
-        });
-
-        // 2. Ouvir Catálogo
-        onSnapshot(doc(db, "settings", "catalog"), (docSnap) => {
-            if (docSnap.exists()) {
-                catalogList = docSnap.data().items || [];
-                renderAdminList();
-            }
-        });
-
-        // Guardar Definições Gerais
-        document.getElementById('site-settings-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const config = {
-                brandName: document.getElementById('cfg-brand').value,
-                heroTitle: document.getElementById('cfg-hero-title').value,
-                heroSubtitle: document.getElementById('cfg-hero-subtitle').value,
-                btnContactText: document.getElementById('cfg-btn-text').value,
-                whatsapp: document.getElementById('cfg-whatsapp').value
-            };
-            await setDoc(doc(db, "settings", "general"), config);
-            alert("Definições atualizadas com sucesso!");
-        });
-
-        // Função de Redimensionamento / Compressão de Imagem para Base64
-        function compressImage(file, maxWidth = 900, quality = 0.75) {
+        // Função de Compressão Automática para Base64 (reduz peso para caber no Firebase)
+        function compressImage(file, maxWidth = 800, quality = 0.6) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.readAsDataURL(file);
@@ -242,14 +208,9 @@
                     img.src = e.target.result;
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        let w = img.width;
-                        let h = img.height;
-                        if (w > maxWidth) {
-                            h = Math.round((h * maxWidth) / w);
-                            w = maxWidth;
-                        }
-                        canvas.width = w;
-                        canvas.height = h;
+                        let w = img.width, h = img.height;
+                        if (w > maxWidth) { h = Math.round((h * maxWidth) / w); w = maxWidth; }
+                        canvas.width = w; canvas.height = h;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, w, h);
                         resolve(canvas.toDataURL('image/jpeg', quality));
@@ -258,57 +219,125 @@
             });
         }
 
-        document.getElementById('prop-image-file').addEventListener('change', async (e) => {
-            if (e.target.files && e.target.files[0]) {
-                const base64 = await compressImage(e.target.files[0]);
-                document.getElementById('prop-main-image-base64').value = base64;
-                document.getElementById('image-preview').src = base64;
-                document.getElementById('image-preview-container').classList.remove('hidden');
+        // 1. CARREGAR CONFIGURAÇÕES GERAIS
+        onSnapshot(doc(db, "settings", "general"), (docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                document.getElementById('cfg-brand').value = data.brandName || "";
+                document.getElementById('cfg-hero-title').value = data.heroTitle || "";
+                document.getElementById('cfg-hero-subtitle').value = data.heroSubtitle || "";
+                document.getElementById('cfg-whatsapp').value = data.whatsapp || "";
+                document.getElementById('cfg-footer-desc').value = data.footerText || "";
+                
+                if (data.logoBase64) {
+                    document.getElementById('cfg-logo-base64').value = data.logoBase64;
+                    document.getElementById('cfg-logo-preview').src = data.logoBase64;
+                    document.getElementById('cfg-logo-preview').classList.remove('hidden');
+                }
+                if (data.heroImageBase64) {
+                    document.getElementById('cfg-hero-base64').value = data.heroImageBase64;
+                    document.getElementById('cfg-hero-preview').src = data.heroImageBase64;
+                    document.getElementById('cfg-hero-preview').classList.remove('hidden');
+                }
             }
         });
 
-        // Guardar/Atualizar Imóvel
+        // 2. CARREGAR IMÓVEIS DA COLEÇÃO
+        onSnapshot(collection(db, "properties"), (snapshot) => {
+            catalogList = snapshot.docs.map(doc => ({ fb_id: doc.id, ...doc.data() }));
+            renderAdminList();
+        });
+
+        // UPLOADS DE IMAGENS DAS CONFIGURAÇÕES
+        document.getElementById('cfg-logo-file').addEventListener('change', async (e) => {
+            if(e.target.files[0]) {
+                const b64 = await compressImage(e.target.files[0], 300, 0.9); // Logo com mais qualidade
+                document.getElementById('cfg-logo-base64').value = b64;
+                document.getElementById('cfg-logo-preview').src = b64;
+                document.getElementById('cfg-logo-preview').classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('cfg-hero-file').addEventListener('change', async (e) => {
+            if(e.target.files[0]) {
+                const b64 = await compressImage(e.target.files[0], 1200, 0.7);
+                document.getElementById('cfg-hero-base64').value = b64;
+                document.getElementById('cfg-hero-preview').src = b64;
+                document.getElementById('cfg-hero-preview').classList.remove('hidden');
+            }
+        });
+
+        // GUARDAR CONFIGURAÇÕES GERAIS
+        document.getElementById('site-settings-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            await setDoc(doc(db, "settings", "general"), {
+                brandName: document.getElementById('cfg-brand').value,
+                heroTitle: document.getElementById('cfg-hero-title').value,
+                heroSubtitle: document.getElementById('cfg-hero-subtitle').value,
+                whatsapp: document.getElementById('cfg-whatsapp').value,
+                footerText: document.getElementById('cfg-footer-desc').value,
+                logoBase64: document.getElementById('cfg-logo-base64').value,
+                heroImageBase64: document.getElementById('cfg-hero-base64').value
+            }, { merge: true });
+            alert("Design e Textos atualizados!");
+        });
+
+        // UPLOADS IMAGENS DOS IMÓVEIS
+        document.getElementById('prop-main-image').addEventListener('change', async (e) => {
+            if(e.target.files[0]) {
+                const b64 = await compressImage(e.target.files[0]);
+                document.getElementById('prop-main-base64').value = b64;
+                document.getElementById('prop-main-preview').src = b64;
+                document.getElementById('prop-main-preview').classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('prop-gallery-images').addEventListener('change', async (e) => {
+            currentGalleryBase64 = [];
+            const previewContainer = document.getElementById('prop-gallery-preview');
+            previewContainer.innerHTML = '';
+            
+            for(let i=0; i<e.target.files.length; i++){
+                const b64 = await compressImage(e.target.files[i]);
+                currentGalleryBase64.push(b64);
+                previewContainer.innerHTML += `<img src="${b64}" class="h-16 w-full object-cover rounded border">`;
+            }
+        });
+
+        // GUARDAR IMÓVEL
         document.getElementById('property-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-
             const id = document.getElementById('prop-id').value;
-            const title = document.getElementById('prop-title').value;
-            const price = parseFloat(document.getElementById('prop-price').value);
-            const location = document.getElementById('prop-location').value;
-            const type = document.getElementById('prop-type').value;
-            const beds = parseInt(document.getElementById('prop-beds').value);
-            const baths = parseInt(document.getElementById('prop-baths').value);
-            const area = parseInt(document.getElementById('prop-area').value);
-            const year = parseInt(document.getElementById('prop-year').value);
-            const description = document.getElementById('prop-desc').value;
-            let mainImage = document.getElementById('prop-main-image-base64').value;
+            let fb_doc_id = id || Date.now().toString(); // Se não tem id, cria um novo
 
-            if (!mainImage) {
-                mainImage = "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80";
-            }
+            const propData = {
+                id: fb_doc_id,
+                title: document.getElementById('prop-title').value,
+                price: parseFloat(document.getElementById('prop-price').value),
+                location: document.getElementById('prop-location').value,
+                type: document.getElementById('prop-type').value,
+                beds: parseInt(document.getElementById('prop-beds').value),
+                baths: parseInt(document.getElementById('prop-baths').value),
+                area: parseInt(document.getElementById('prop-area').value),
+                year: parseInt(document.getElementById('prop-year').value),
+                description: document.getElementById('prop-desc').value,
+                mainImage: document.getElementById('prop-main-base64').value || "https://via.placeholder.com/800",
+                gallery: currentGalleryBase64.length > 0 ? currentGalleryBase64 : (id ? null : []) 
+            };
 
-            if (id) {
-                // Modo Edição
-                const index = catalogList.findIndex(p => p.id == id);
-                if (index !== -1) {
-                    catalogList[index] = { id: parseInt(id), title, price, location, type, beds, baths, area, year, description, mainImage, images: [] };
-                }
-            } else {
-                // Modo Adicionar
-                const newId = catalogList.length > 0 ? Math.max(...catalogList.map(p => p.id)) + 1 : 1;
-                catalogList.push({ id: newId, title, price, location, type, beds, baths, area, year, description, mainImage, images: [] });
-            }
+            // Remove galeria vazia se for edição para não apagar a que lá está
+            if(id && currentGalleryBase64.length === 0) delete propData.gallery;
 
-            await setDoc(doc(db, "settings", "catalog"), { items: catalogList });
+            await setDoc(doc(db, "properties", fb_doc_id), propData, { merge: true });
             resetPropertyForm();
-            alert("Imóvel guardado no Firebase!");
+            alert("Imóvel guardado com sucesso!");
         });
 
-        window.editProperty = function(id) {
-            const prop = catalogList.find(p => p.id === id);
+        window.editProperty = function(fb_id) {
+            const prop = catalogList.find(p => p.fb_id === fb_id);
             if (!prop) return;
 
-            document.getElementById('prop-id').value = prop.id;
+            document.getElementById('prop-id').value = prop.fb_id;
             document.getElementById('prop-title').value = prop.title;
             document.getElementById('prop-price').value = prop.price;
             document.getElementById('prop-location').value = prop.location;
@@ -316,59 +345,61 @@
             document.getElementById('prop-beds').value = prop.beds;
             document.getElementById('prop-baths').value = prop.baths;
             document.getElementById('prop-area').value = prop.area;
-            document.getElementById('prop-year').value = prop.year || 2023;
+            document.getElementById('prop-year').value = prop.year;
             document.getElementById('prop-desc').value = prop.description;
-            document.getElementById('prop-main-image-base64').value = prop.mainImage;
+            
+            document.getElementById('prop-main-base64').value = prop.mainImage;
+            document.getElementById('prop-main-preview').src = prop.mainImage;
+            document.getElementById('prop-main-preview').classList.remove('hidden');
 
-            document.getElementById('image-preview').src = prop.mainImage;
-            document.getElementById('image-preview-container').classList.remove('hidden');
+            currentGalleryBase64 = prop.gallery || [];
+            const previewContainer = document.getElementById('prop-gallery-preview');
+            previewContainer.innerHTML = '';
+            currentGalleryBase64.forEach(img => {
+                previewContainer.innerHTML += `<img src="${img}" class="h-16 w-full object-cover rounded border">`;
+            });
 
-            document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-pen text-amber-500"></i> Editar Imóvel #${prop.id}`;
+            document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-pen text-amber-500"></i> Editar Imóvel`;
             document.getElementById('btn-cancel-edit').classList.remove('hidden');
+            window.scrollTo(0,0);
         };
 
-        window.deleteProperty = async function(id) {
-            if (confirm("Tem a certeza que deseja eliminar este imóvel?")) {
-                catalogList = catalogList.filter(p => p.id !== id);
-                await setDoc(doc(db, "settings", "catalog"), { items: catalogList });
+        window.deleteProperty = async function(fb_id) {
+            if (confirm("Deseja eliminar definitivamente este imóvel?")) {
+                await deleteDoc(doc(db, "properties", fb_id));
             }
         };
 
         window.resetPropertyForm = function() {
             document.getElementById('property-form').reset();
             document.getElementById('prop-id').value = '';
-            document.getElementById('prop-main-image-base64').value = '';
-            document.getElementById('image-preview-container').classList.add('hidden');
-            document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-plus text-emerald-500"></i> Adicionar Novo Imóvel`;
+            document.getElementById('prop-main-base64').value = '';
+            document.getElementById('prop-main-preview').classList.add('hidden');
+            document.getElementById('prop-gallery-preview').innerHTML = '';
+            currentGalleryBase64 = [];
+            document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-house-medical text-emerald-500"></i> Adicionar Imóvel`;
             document.getElementById('btn-cancel-edit').classList.add('hidden');
         };
 
         function renderAdminList() {
-            const listContainer = document.getElementById('admin-properties-list');
-            listContainer.innerHTML = '';
-
-            if (catalogList.length === 0) {
-                listContainer.innerHTML = `<p class="text-xs text-slate-400 italic">Nenhum imóvel registado.</p>`;
-                return;
-            }
-
+            const list = document.getElementById('admin-properties-list');
+            list.innerHTML = catalogList.length === 0 ? '<p class="text-xs text-slate-400">Sem imóveis.</p>' : '';
             catalogList.forEach(prop => {
-                const item = document.createElement('div');
-                item.className = "flex items-center justify-between p-3 bg-slate-50 border rounded-xl hover:bg-slate-100 transition";
-                item.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <img src="${prop.mainImage}" class="w-12 h-12 rounded-lg object-cover">
-                        <div>
-                            <p class="font-bold text-sm text-slate-800">${prop.title}</p>
-                            <p class="text-xs text-slate-500">${prop.type} • ${prop.price.toLocaleString('pt-PT')} € • ${prop.location}</p>
+                list.innerHTML += `
+                    <div class="flex items-center justify-between p-3 bg-slate-50 border rounded-xl">
+                        <div class="flex items-center gap-3">
+                            <img src="${prop.mainImage}" class="w-12 h-12 rounded-lg object-cover">
+                            <div>
+                                <p class="font-bold text-sm text-slate-800">${prop.title}</p>
+                                <p class="text-xs text-slate-500">${prop.price.toLocaleString('pt-PT')} € • ${prop.location}</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="editProperty('${prop.fb_id}')" class="text-slate-600 hover:text-amber-600 p-2"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteProperty('${prop.fb_id}')" class="text-slate-600 hover:text-rose-600 p-2"><i class="fa-solid fa-trash"></i></button>
                         </div>
                     </div>
-                    <div class="flex gap-2">
-                        <button onclick="editProperty(${prop.id})" class="text-slate-600 hover:text-amber-600 p-2 text-sm"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="deleteProperty(${prop.id})" class="text-slate-600 hover:text-rose-600 p-2 text-sm"><i class="fa-solid fa-trash"></i></button>
-                    </div>
                 `;
-                listContainer.appendChild(item);
             });
         }
     </script>
