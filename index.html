@@ -169,7 +169,7 @@
                             </div>
                         </div>
 
-                        <!-- CARTÃO LATERAL DE INTERESSE (DADOS EDITÁVEIS) -->
+                        <!-- CARTÃO LATERAL DE INTERESSE -->
                         <div class="lg:col-span-1">
                             <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 sticky top-28">
                                 <h4 id="detail-cta-title" class="font-bold text-gray-800 mb-4 text-xl">Tem interesse?</h4>
@@ -249,7 +249,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, doc, onSnapshot, collection, initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // FIX FIXO DE URL SEM #
         function cleanUrlHash() {
             if (window.location.hash) {
                 history.replaceState("", document.title, window.location.pathname + window.location.search);
@@ -264,7 +263,6 @@
             projectId: "alojamento-c4f0a"
         });
 
-        // INICIAR FIREBASE COM CACHE OFFLINE
         const db = initializeFirestore(app, {
             localCache: persistentLocalCache({tabManager: persistentMultipleTabManager()})
         });
@@ -280,7 +278,6 @@
         let filteredProperties = [];
         let currentProperty = null;
 
-        // LÓGICA DE CARREGAMENTO
         let loadProgress = 0;
         let isInitialLoadDone = false;
         let dbLoaded = false;
@@ -318,7 +315,6 @@
             }, 500);
         }
 
-        // SINCRONIZAR CONFIGURAÇÕES
         onSnapshot(doc(db, "settings", "general"), (docSnap) => {
             if (docSnap.exists()) {
                 siteConfig = { ...siteConfig, ...docSnap.data() };
@@ -330,11 +326,9 @@
                 document.getElementById('footer-email').innerText = siteConfig.email || "contacto@imobiliaria.pt";
                 document.getElementById('footer-copy-name').innerText = siteConfig.brandName;
 
-                // Cartão de Interesse na Subpágina
                 document.getElementById('detail-cta-title').innerText = siteConfig.ctaTitle || "Tem interesse?";
                 document.getElementById('detail-cta-text').innerText = siteConfig.ctaText || "Entre em contacto direto com o consultor para agendar uma visita ou esclarecer dúvidas.";
 
-                // Aplicar Cores Dinâmicas
                 const colorBlue = siteConfig.colorBlue || "#0284c7";
                 const colorWhite = siteConfig.colorWhite || "#ffffff";
                 const colorFooter = siteConfig.colorFooter || "#0f172a";
@@ -347,12 +341,10 @@
                     #footer { background-color: ${colorFooter} !important; }
                 `;
 
-                // Horários de Atendimento
                 if (siteConfig.hoursWeek) document.getElementById('hours-week').innerText = siteConfig.hoursWeek;
                 if (siteConfig.hoursSat) document.getElementById('hours-sat').innerText = siteConfig.hoursSat;
                 if (siteConfig.hoursSun) document.getElementById('hours-sun').innerText = siteConfig.hoursSun;
 
-                // Redes Sociais
                 const socialContainer = document.getElementById('footer-socials');
                 socialContainer.innerHTML = '';
                 
@@ -385,7 +377,6 @@
             }
         });
 
-        // SINCRONIZAR IMÓVEIS
         onSnapshot(collection(db, "properties"), (snapshot) => {
             allProperties = snapshot.docs.map(doc => ({ fb_id: doc.id, ...doc.data() }));
             applyFilters();
@@ -414,14 +405,12 @@
             }
         });
 
-        // WHATSAPP GERAL DO SITE
         window.openWhatsApp = function() { 
             const msg = siteConfig.whatsappDefaultMsg || "Olá! Estou no vosso site e gostaria de mais informações.";
             const num = (siteConfig.whatsapp || "").replace(/\D/g, '');
             window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`, '_blank'); 
         };
 
-        // WHATSAPP ESPECÍFICO DO IMÓVEL (SUB-PÁGINA)
         window.openPropertyWhatsApp = function() {
             if (!currentProperty) {
                 openWhatsApp();
@@ -450,17 +439,25 @@
         function renderProperties() {
             const grid = document.getElementById('properties-grid');
             grid.innerHTML = '';
+            
+            // 1. MENSAGEM DE FILTRO VAZIO (NENHUM RESULTADO)
+            if (filteredProperties.length === 0) {
+                grid.innerHTML = '<div class="col-span-full py-16 text-center"><p class="text-lg text-slate-500 font-medium">Nenhum resultado encontrado para o seu filtro.</p></div>';
+                return;
+            }
+
+            // 2. TÍTULOS SEM TRUNCAR E ALINHAMENTO FLEXBOX
             filteredProperties.forEach((prop) => {
                 grid.innerHTML += `
-                    <div class="group cursor-pointer bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all hover:-translate-y-2 border border-gray-100" onclick="openDetails('${prop.fb_id}')">
-                        <div class="relative h-64 overflow-hidden">
+                    <div class="group cursor-pointer bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all hover:-translate-y-2 border border-gray-100 flex flex-col h-full" onclick="openDetails('${prop.fb_id}')">
+                        <div class="relative h-64 overflow-hidden shrink-0">
                             <img src="${prop.mainImage}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         </div>
-                        <div class="p-6">
+                        <div class="p-6 flex flex-col flex-grow">
                             <p class="text-2xl font-bold text-brand-900 mb-2">${prop.price.toLocaleString('pt-PT')} €</p>
-                            <h3 class="text-lg font-bold text-gray-800 mb-2 truncate">${prop.title}</h3>
-                            <p class="text-gray-500 text-sm mb-4 truncate"><i class="fa-solid fa-location-dot text-brand-500 mr-2"></i>${prop.location}</p>
-                            <div class="flex justify-between border-t border-gray-100 pt-4 text-gray-600 text-sm font-medium">
+                            <h3 class="text-lg font-bold text-gray-800 mb-2 leading-tight">${prop.title}</h3>
+                            <p class="text-gray-500 text-sm mb-4"><i class="fa-solid fa-location-dot text-brand-500 mr-2"></i>${prop.location}</p>
+                            <div class="mt-auto pt-4 flex justify-between border-t border-gray-100 text-gray-600 text-sm font-medium">
                                 <div><i class="fa-solid fa-bed text-brand-500 mr-1"></i> ${prop.beds}</div>
                                 <div><i class="fa-solid fa-bath text-brand-500 mr-1"></i> ${prop.baths}</div>
                                 <div><i class="fa-solid fa-ruler text-brand-500 mr-1"></i> ${prop.area}m²</div>
@@ -514,7 +511,7 @@
             cleanUrlHash();
         };
 
-        window.resetApp = function() { closeDetails(); document.getElementById('searchInput').value=''; applyFilters(); window.scrollTo(0,0); cleanUrlHash(); };
+        window.resetApp = function() { closeDetails(); document.getElementById('searchInput').value=''; document.getElementById('typeInput').value=''; applyFilters(); window.scrollTo(0,0); cleanUrlHash(); };
         window.scrollToGrid = function() { document.getElementById('imoveis').scrollIntoView(); cleanUrlHash(); };
 
         function updateNav(forceWhite) {
