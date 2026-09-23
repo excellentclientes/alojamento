@@ -160,7 +160,7 @@
                                 <div><p class="text-gray-400 text-xs uppercase mb-1">Quartos</p><p id="spec-beds" class="font-bold text-lg"><i class="fa-solid fa-bed text-brand-500"></i> 0</p></div>
                                 <div><p class="text-gray-400 text-xs uppercase mb-1">WC</p><p id="spec-baths" class="font-bold text-lg"><i class="fa-solid fa-bath text-brand-500"></i> 0</p></div>
                                 <div><p class="text-gray-400 text-xs uppercase mb-1">Área</p><p id="spec-area" class="font-bold text-lg"><i class="fa-solid fa-ruler-combined text-brand-500"></i> 0 m²</p></div>
-                                <div><p class="text-gray-400 text-xs uppercase mb-1">Ano</p><p id="spec-year" class="font-bold text-lg"><i class="fa-solid fa-calendar text-brand-500"></i> 2024</p></div>
+                                <div><p class="text-gray-400 text-xs uppercase mb-1">Ano</p><p id="spec-year" class="font-bold text-lg"><i class="fa-solid fa-calendar text-brand-500"></i> 2026</p></div>
                             </div>
 
                             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-8">
@@ -169,11 +169,12 @@
                             </div>
                         </div>
 
+                        <!-- CARTÃO LATERAL DE INTERESSE (DADOS EDITÁVEIS) -->
                         <div class="lg:col-span-1">
                             <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 sticky top-28">
-                                <h4 class="font-bold text-gray-800 mb-4 text-xl">Tem interesse?</h4>
-                                <p class="text-sm text-gray-500 mb-6">Entre em contacto direto com o consultor para agendar uma visita ou esclarecer dúvidas.</p>
-                                <button onclick="openWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 transition text-white py-4 rounded-xl font-bold flex items-center justify-center gap-3 shadow-lg shadow-emerald-200">
+                                <h4 id="detail-cta-title" class="font-bold text-gray-800 mb-4 text-xl">Tem interesse?</h4>
+                                <p id="detail-cta-text" class="text-sm text-gray-500 mb-6">Entre em contacto direto com o consultor para agendar uma visita ou esclarecer dúvidas.</p>
+                                <button onclick="openPropertyWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 transition text-white py-4 rounded-xl font-bold flex items-center justify-center gap-3 shadow-lg shadow-emerald-200">
                                     <i class="fa-brands fa-whatsapp text-2xl"></i> Falar no WhatsApp
                                 </button>
                             </div>
@@ -234,7 +235,7 @@
                 </div>
                 
                 <div class="border-t border-slate-800 pt-8 mt-8 flex flex-col md:flex-row justify-between items-center gap-2">
-                    <p class="text-slate-500 text-sm">© 2024 <span id="footer-copy-name">Imobiliária</span>. Todos os direitos reservados.</p>
+                    <p class="text-slate-500 text-sm">© 2026 <span id="footer-copy-name">Imobiliária</span>. Todos os direitos reservados.</p>
                     <p class="text-slate-600 text-xs">
                         <a href="https://wa.me/5511934664498" target="_blank" class="hover:underline hover:text-sky-400 transition">Developed by Marcos Valério</a>
                     </p>
@@ -268,9 +269,16 @@
             localCache: persistentLocalCache({tabManager: persistentMultipleTabManager()})
         });
 
-        let siteConfig = { brandName: "Imobiliária", whatsapp: "351912345678" };
+        let siteConfig = { 
+            brandName: "Imobiliária", 
+            whatsapp: "351912345678",
+            ctaTitle: "Tem interesse?",
+            ctaText: "Entre em contacto direto com o consultor para agendar uma visita ou esclarecer dúvidas.",
+            whatsappDefaultMsg: "Olá! Estou no vosso site e gostaria de mais informações."
+        };
         let allProperties = [];
         let filteredProperties = [];
+        let currentProperty = null;
 
         // LÓGICA DE CARREGAMENTO
         let loadProgress = 0;
@@ -321,6 +329,10 @@
                 document.getElementById('footer-phone').innerText = "+" + siteConfig.whatsapp;
                 document.getElementById('footer-email').innerText = siteConfig.email || "contacto@imobiliaria.pt";
                 document.getElementById('footer-copy-name').innerText = siteConfig.brandName;
+
+                // Cartão de Interesse na Subpágina
+                document.getElementById('detail-cta-title').innerText = siteConfig.ctaTitle || "Tem interesse?";
+                document.getElementById('detail-cta-text').innerText = siteConfig.ctaText || "Entre em contacto direto com o consultor para agendar uma visita ou esclarecer dúvidas.";
 
                 // Aplicar Cores Dinâmicas
                 const colorBlue = siteConfig.colorBlue || "#0284c7";
@@ -402,7 +414,29 @@
             }
         });
 
-        window.openWhatsApp = function() { window.open(`https://wa.me/${siteConfig.whatsapp.replace(/\D/g, '')}?text=Olá! Estou no vosso site e gostaria de mais informações.`, '_blank'); };
+        // WHATSAPP GERAL DO SITE
+        window.openWhatsApp = function() { 
+            const msg = siteConfig.whatsappDefaultMsg || "Olá! Estou no vosso site e gostaria de mais informações.";
+            const num = (siteConfig.whatsapp || "").replace(/\D/g, '');
+            window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`, '_blank'); 
+        };
+
+        // WHATSAPP ESPECÍFICO DO IMÓVEL (SUB-PÁGINA)
+        window.openPropertyWhatsApp = function() {
+            if (!currentProperty) {
+                openWhatsApp();
+                return;
+            }
+            const num = (siteConfig.whatsapp || "").replace(/\D/g, '');
+            const msgText = `*Imóvel:* ${currentProperty.title}\n` +
+                            `*Preço:* ${currentProperty.price ? currentProperty.price.toLocaleString('pt-PT') : '0'} €\n` +
+                            `*Localização:* ${currentProperty.location || ''}\n` +
+                            `*Tipo:* ${currentProperty.type || ''}\n` +
+                            `*Especificações:* ${currentProperty.beds || 0} Quartos | ${currentProperty.baths || 0} WC | ${currentProperty.area || 0}m² | Ano ${currentProperty.year || '2026'}\n\n` +
+                            `Vim pelo site e tenho interesse`;
+
+            window.open(`https://wa.me/${num}?text=${encodeURIComponent(msgText)}`, '_blank');
+        };
 
         function applyFilters() {
             const search = document.getElementById('searchInput').value.toLowerCase();
@@ -439,13 +473,15 @@
         window.openDetails = function(fb_id) {
             const prop = allProperties.find(p => p.fb_id === fb_id);
             if (!prop) return;
+            currentProperty = prop;
+
             document.getElementById('detail-title').innerText = prop.title;
             document.getElementById('detail-price').innerText = prop.price.toLocaleString('pt-PT') + " €";
             document.getElementById('detail-location').innerHTML = `<i class="fa-solid fa-location-dot text-brand-500 mr-2"></i>${prop.location}`;
             document.getElementById('spec-beds').innerHTML = `<i class="fa-solid fa-bed text-brand-500 mr-2"></i>${prop.beds}`;
             document.getElementById('spec-baths').innerHTML = `<i class="fa-solid fa-bath text-brand-500 mr-2"></i>${prop.baths}`;
             document.getElementById('spec-area').innerHTML = `<i class="fa-solid fa-ruler-combined text-brand-500 mr-2"></i>${prop.area} m²`;
-            document.getElementById('spec-year').innerHTML = `<i class="fa-solid fa-calendar text-brand-500 mr-2"></i>${prop.year}`;
+            document.getElementById('spec-year').innerHTML = `<i class="fa-solid fa-calendar text-brand-500 mr-2"></i>${prop.year || 2026}`;
             document.getElementById('detail-description').innerText = prop.description;
 
             const mainImg = document.getElementById('detail-main-img');
@@ -470,6 +506,7 @@
         };
 
         window.closeDetails = function() {
+            currentProperty = null;
             document.getElementById('details-view').classList.add('hidden');
             document.getElementById('home-view').classList.remove('hidden');
             updateNav(false);

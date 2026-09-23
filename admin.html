@@ -96,6 +96,23 @@
                         <input type="text" id="cfg-hero-subtitle" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
                     </div>
 
+                    <!-- CARTÃO DE INTERESSE & MENSAGENS -->
+                    <div class="border-t pt-3 space-y-2">
+                        <label class="block text-xs font-bold text-slate-800 uppercase">Cartão de Interesse & WhatsApp</label>
+                        <div>
+                            <label class="block text-[10px] text-slate-500">Título do Cartão na Subpágina</label>
+                            <input type="text" id="cfg-cta-title" placeholder="Tem interesse?" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs outline-none focus:border-sky-500">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-slate-500">Texto do Cartão na Subpágina</label>
+                            <textarea id="cfg-cta-text" rows="2" placeholder="Entre em contacto direto com o consultor..." class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs outline-none focus:border-sky-500 resize-none"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-slate-500">Mensagem WhatsApp Padrão (Site Geral)</label>
+                            <input type="text" id="cfg-wa-default-msg" placeholder="Olá! Estou no vosso site e gostaria de mais informações." class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 text-xs outline-none focus:border-sky-500">
+                        </div>
+                    </div>
+
                     <!-- HORÁRIO DE ATENDIMENTO -->
                     <div class="border-t pt-3 space-y-2">
                         <label class="block text-xs font-bold text-slate-800 uppercase">Horário de Atendimento</label>
@@ -131,7 +148,7 @@
                     </div>
 
                     <div class="border-t pt-3">
-                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">WhatsApp (com 351)</label>
+                        <label class="block text-xs font-bold text-slate-600 uppercase mb-1">WhatsApp de Contacto (com 351)</label>
                         <input type="text" id="cfg-whatsapp" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none focus:border-sky-500">
                     </div>
                     <div>
@@ -189,7 +206,7 @@
                         <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1">Quartos</label><input type="number" id="prop-beds" value="0" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none"></div>
                         <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1">Casas de Banho</label><input type="number" id="prop-baths" value="0" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none"></div>
                         <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1">Área (m²)</label><input type="number" id="prop-area" value="0" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none"></div>
-                        <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1">Ano</label><input type="number" id="prop-year" value="2024" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none"></div>
+                        <div><label class="block text-xs font-bold text-slate-600 uppercase mb-1">Ano</label><input type="number" id="prop-year" value="2026" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm outline-none"></div>
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-600 uppercase mb-1">Descrição</label>
@@ -295,6 +312,11 @@
                 document.getElementById('cfg-email').value = data.email || "";
                 document.getElementById('cfg-footer-desc').value = data.footerText || "";
                 
+                // Cartão de Interesse e WhatsApp
+                document.getElementById('cfg-cta-title').value = data.ctaTitle || "Tem interesse?";
+                document.getElementById('cfg-cta-text').value = data.ctaText || "Entre em contacto direto com o consultor para agendar uma visita ou esclarecer dúvidas.";
+                document.getElementById('cfg-wa-default-msg').value = data.whatsappDefaultMsg || "Olá! Estou no vosso site e gostaria de mais informações.";
+
                 // Cores
                 document.getElementById('cfg-color-blue').value = data.colorBlue || "#0284c7";
                 document.getElementById('cfg-color-white').value = data.colorWhite || "#ffffff";
@@ -341,6 +363,9 @@
                     whatsapp: document.getElementById('cfg-whatsapp').value,
                     email: document.getElementById('cfg-email').value,
                     footerText: document.getElementById('cfg-footer-desc').value,
+                    ctaTitle: document.getElementById('cfg-cta-title').value,
+                    ctaText: document.getElementById('cfg-cta-text').value,
+                    whatsappDefaultMsg: document.getElementById('cfg-wa-default-msg').value,
                     colorBlue: document.getElementById('cfg-color-blue').value,
                     colorWhite: document.getElementById('cfg-color-white').value,
                     colorFooter: document.getElementById('cfg-color-footer').value,
@@ -452,6 +477,7 @@
             currentGalleryBase64 = [];
             document.getElementById('form-title').innerHTML = `<i class="fa-solid fa-house-medical text-emerald-500"></i> Adicionar Imóvel`;
             document.getElementById('btn-cancel-edit').classList.add('hidden');
+            document.getElementById('prop-year').value = "2026";
         };
 
         function renderAdminList() {
